@@ -3,21 +3,21 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <meta name="theme-color" content="#121216">
+  <meta name="theme-color" content="#181924">
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <title>专属音乐馆 V3.0 极速版</title>
+  <title>儿童儿歌大宝库 V4.0 海量版</title>
   <style>
     :root {
-      --bg-primary: #0f1015;
-      --bg-secondary: #181920;
-      --bg-card: rgba(30, 32, 42, 0.75);
-      --bg-card-hover: rgba(42, 45, 60, 0.9);
-      --accent: #ff3a56;
-      --accent-glow: rgba(255, 58, 86, 0.35);
-      --text-main: #f5f6fa;
+      --bg-primary: #12131a;
+      --bg-secondary: #1a1c26;
+      --bg-card: rgba(32, 35, 48, 0.85);
+      --bg-card-hover: rgba(45, 49, 68, 0.95);
+      --accent: #ff5277;
+      --accent-green: #2ed573;
+      --text-main: #f8f9fa;
       --text-sub: #9ca0b0;
       --border-color: rgba(255, 255, 255, 0.08);
-      --player-height: 80px;
+      --player-height: 84px;
       --radius: 12px;
     }
 
@@ -37,7 +37,7 @@
       position: sticky;
       top: 0;
       z-index: 100;
-      background: rgba(15, 16, 21, 0.95);
+      background: rgba(18, 19, 26, 0.96);
       backdrop-filter: blur(16px);
       -webkit-backdrop-filter: blur(16px);
       border-bottom: 1px solid var(--border-color);
@@ -45,7 +45,7 @@
     }
 
     .header-inner {
-      max-width: 900px;
+      max-width: 960px;
       margin: 0 auto;
       display: flex;
       flex-direction: column;
@@ -62,41 +62,17 @@
       display: flex;
       align-items: center;
       gap: 8px;
-      font-size: 1.1rem;
+      font-size: 1.15rem;
       font-weight: 700;
+      color: #ff9ff3;
     }
 
     .brand-badge {
       font-size: 0.68rem;
       font-weight: 600;
-      background: #ff3a56;
+      background: var(--accent);
       padding: 2px 8px;
       border-radius: 99px;
-      color: #fff;
-    }
-
-    .tab-pills {
-      display: flex;
-      gap: 4px;
-      background: var(--bg-secondary);
-      padding: 3px;
-      border-radius: 8px;
-      border: 1px solid var(--border-color);
-    }
-
-    .tab-btn {
-      background: transparent;
-      border: none;
-      color: var(--text-sub);
-      padding: 5px 9px;
-      border-radius: 6px;
-      font-size: 0.76rem;
-      font-weight: 600;
-      cursor: pointer;
-    }
-
-    .tab-btn.active {
-      background: var(--accent);
       color: #fff;
     }
 
@@ -117,13 +93,11 @@
       outline: none;
     }
 
-    .search-input:focus {
-      border-color: var(--accent);
-    }
+    .search-input:focus { border-color: var(--accent); }
 
     .search-btn {
       height: 44px;
-      padding: 0 18px;
+      padding: 0 20px;
       background: var(--accent);
       border: none;
       border-radius: var(--radius);
@@ -133,28 +107,36 @@
       cursor: pointer;
     }
 
-    .quick-tags {
+    .quick-categories {
       display: flex;
       gap: 6px;
       overflow-x: auto;
       scrollbar-width: none;
+      padding-bottom: 2px;
     }
-    .quick-tags::-webkit-scrollbar { display: none; }
+    .quick-categories::-webkit-scrollbar { display: none; }
 
-    .quick-tag {
+    .cat-btn {
       background: rgba(255, 255, 255, 0.06);
       border: 1px solid var(--border-color);
       color: var(--text-sub);
-      padding: 4px 10px;
+      padding: 6px 12px;
       border-radius: 99px;
-      font-size: 0.75rem;
+      font-size: 0.78rem;
       cursor: pointer;
       white-space: nowrap;
+      transition: all 0.2s;
+    }
+
+    .cat-btn.active {
+      background: var(--accent);
+      color: #fff;
+      border-color: var(--accent);
     }
 
     main {
       flex: 1;
-      max-width: 900px;
+      max-width: 960px;
       width: 100%;
       margin: 0 auto;
       padding: 14px 16px;
@@ -170,8 +152,9 @@
     }
 
     .meta-badge {
-      font-size: 0.74rem;
-      color: var(--text-sub);
+      font-size: 0.76rem;
+      color: #2ed573;
+      font-weight: 500;
     }
 
     .song-grid {
@@ -187,13 +170,15 @@
       background: var(--bg-card);
       border: 1px solid var(--border-color);
       border-radius: var(--radius);
-      padding: 8px 12px;
+      padding: 10px 14px;
       cursor: pointer;
+      transition: all 0.2s;
     }
 
     .song-card.playing {
       background: var(--bg-card-hover);
-      border-color: rgba(255, 58, 86, 0.5);
+      border-color: rgba(255, 82, 119, 0.6);
+      box-shadow: 0 4px 12px rgba(255, 82, 119, 0.15);
     }
 
     .cover-wrap {
@@ -217,18 +202,16 @@
     }
 
     .song-title {
-      font-size: 0.9rem;
+      font-size: 0.92rem;
       font-weight: 600;
       color: var(--text-main);
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
-      margin-bottom: 2px;
+      margin-bottom: 3px;
     }
 
-    .song-card.playing .song-title {
-      color: var(--accent);
-    }
+    .song-card.playing .song-title { color: var(--accent); }
 
     .song-artist {
       font-size: 0.75rem;
@@ -241,15 +224,15 @@
     .song-actions {
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 8px;
     }
 
     .action-btn {
-      background: rgba(255, 255, 255, 0.06);
+      background: rgba(255, 255, 255, 0.08);
       border: 1px solid var(--border-color);
-      color: var(--text-sub);
-      width: 34px;
-      height: 34px;
+      color: var(--text-main);
+      width: 36px;
+      height: 36px;
       border-radius: 50%;
       display: flex;
       align-items: center;
@@ -257,9 +240,9 @@
       cursor: pointer;
     }
 
-    .action-btn.fav.active {
-      color: var(--accent);
-      border-color: var(--accent);
+    .action-btn.dl {
+      color: var(--accent-green);
+      background: rgba(46, 213, 115, 0.12);
     }
 
     .player-bar {
@@ -268,7 +251,7 @@
       left: 0;
       right: 0;
       height: calc(var(--player-height) + env(safe-area-inset-bottom, 0px));
-      background: rgba(24, 25, 32, 0.96);
+      background: rgba(24, 25, 34, 0.98);
       backdrop-filter: blur(20px);
       -webkit-backdrop-filter: blur(20px);
       border-top: 1px solid var(--border-color);
@@ -279,7 +262,7 @@
     }
 
     .player-inner {
-      max-width: 900px;
+      max-width: 960px;
       width: 100%;
       margin: 0 auto;
       display: flex;
@@ -306,12 +289,12 @@
     }
 
     .now-meta { min-width: 0; }
-    .now-title { font-size: 0.85rem; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .now-title { font-size: 0.86rem; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
     .now-artist { font-size: 0.72rem; color: var(--text-sub); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
     .ctrl-btn.play-pause {
-      width: 38px;
-      height: 38px;
+      width: 42px;
+      height: 42px;
       border-radius: 50%;
       background: var(--accent);
       color: #fff;
@@ -322,12 +305,56 @@
       cursor: pointer;
     }
 
+    /* iPhone 原生下载辅助弹窗 */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.75);
+      backdrop-filter: blur(8px);
+      z-index: 999;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .modal-box {
+      background: #1f2230;
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 24px 20px;
+      max-width: 360px;
+      width: 100%;
+      text-align: center;
+      box-shadow: 0 12px 36px rgba(0,0,0,0.6);
+    }
+
+    .modal-title { font-size: 1.05rem; font-weight: 700; margin-bottom: 10px; color: #fff; }
+    .modal-desc { font-size: 0.84rem; color: var(--text-sub); line-height: 1.5; margin-bottom: 18px; text-align: left; }
+    .modal-desc b { color: var(--accent-green); }
+
+    .modal-btn {
+      display: block;
+      width: 100%;
+      padding: 13px;
+      border-radius: 10px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      text-decoration: none;
+      margin-bottom: 10px;
+      cursor: pointer;
+      text-align: center;
+    }
+
+    .modal-btn.primary { background: var(--accent-green); color: #000; }
+    .modal-close { font-size: 0.8rem; color: var(--text-sub); margin-top: 10px; cursor: pointer; display: inline-block; }
+
     .toast {
       position: fixed;
       top: 18px;
       left: 50%;
       transform: translateX(-50%) translateY(-30px);
-      background: rgba(24, 25, 32, 0.95);
+      background: rgba(24, 25, 34, 0.95);
       border: 1px solid var(--accent);
       color: #fff;
       padding: 8px 16px;
@@ -338,11 +365,7 @@
       z-index: 1000;
       pointer-events: none;
     }
-
-    .toast.show {
-      transform: translateX(-50%) translateY(0);
-      opacity: 1;
-    }
+    .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
   </style>
 </head>
 <body>
@@ -351,37 +374,34 @@
     <div class="header-inner">
       <div class="brand-row">
         <div class="brand">
-          <span>🎧 专属音乐馆</span>
-          <span class="brand-badge">V3.0 极速版</span>
-        </div>
-        <div class="tab-pills">
-          <button class="tab-btn active" id="tab-cn" onclick="switchTab('cn')">大陆曲库</button>
-          <button class="tab-btn" id="tab-hk" onclick="switchTab('hk')">港台曲库</button>
-          <button class="tab-btn" id="tab-fav" onclick="switchTab('fav')">收藏 (<span id="fav-count">0</span>)</button>
+          <span>👶 儿童儿歌大宝库</span>
+          <span class="brand-badge">V4.0 海量200首版</span>
         </div>
       </div>
 
       <div class="search-box-wrap">
-        <input type="text" id="searchInput" class="search-input" placeholder="输入歌名或歌手（如：周杰伦、晴天、陈奕迅）..." autocomplete="off">
+        <input type="text" id="searchInput" class="search-input" placeholder="输入歌名/歌手（如：数鸭子、小星星、周杰伦）..." autocomplete="off">
         <button class="search-btn" onclick="triggerSearch()">搜索</button>
       </div>
 
-      <div class="quick-tags">
-        <div class="quick-tag" onclick="quickSearch('周杰伦')">周杰伦</div>
-        <div class="quick-tag" onclick="quickSearch('晴天')">晴天</div>
-        <div class="quick-tag" onclick="quickSearch('七里香')">七里香</div>
-        <div class="quick-tag" onclick="quickSearch('稻香')">稻香</div>
-        <div class="quick-tag" onclick="quickSearch('青花瓷')">青花瓷</div>
-        <div class="quick-tag" onclick="quickSearch('陈奕迅')">陈奕迅</div>
-        <div class="quick-tag" onclick="quickSearch('林俊杰')">林俊杰</div>
+      <!-- 八大儿歌主题，点击直接调取对应 200 首海量曲库 -->
+      <div class="quick-categories">
+        <div class="cat-btn active" onclick="loadCategory('宝宝巴士', this)">🍼 宝宝巴士 (200首)</div>
+        <div class="cat-btn" onclick="loadCategory('贝乐虎', this)">🐯 贝乐虎儿歌</div>
+        <div class="cat-btn" onclick="loadCategory('经典儿歌', this)">🐰 经典童谣</div>
+        <div class="cat-btn" onclick="loadCategory('睡前儿歌', this)">💤 睡前摇篮曲</div>
+        <div class="cat-btn" onclick="loadCategory('英文儿歌', this)">🔤 英文童谣 (ABC)</div>
+        <div class="cat-btn" onclick="loadCategory('恐龙儿歌', this)">🦖 恐龙与工程车</div>
+        <div class="cat-btn" onclick="loadCategory('儿歌多多', this)">🌟 儿歌多多</div>
+        <div class="cat-btn" onclick="loadCategory('周杰伦', this)">🎧 周杰伦流行</div>
       </div>
     </div>
   </header>
 
   <main>
     <div class="section-title">
-      <span id="listTitle">周杰伦 热门正版精选</span>
-      <span class="meta-badge" id="listBadge">即点即播</span>
+      <span id="listTitle">宝宝巴士儿歌海量曲库</span>
+      <span class="meta-badge" id="listBadge">正在加载...</span>
     </div>
     <div class="song-grid" id="songList"></div>
   </main>
@@ -397,13 +417,27 @@
       </div>
 
       <button class="ctrl-btn play-pause" id="playPauseBtn" onclick="togglePlay()" title="播放/暂停">
-        <svg id="playIcon" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
-        <svg id="pauseIcon" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" style="display:none;"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+        <svg id="playIcon" width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+        <svg id="pauseIcon" width="22" height="22" viewBox="0 0 24 24" fill="currentColor" style="display:none;"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
       </button>
 
-      <button class="action-btn" onclick="downloadCurrentSong()" title="下载">
+      <button class="action-btn dl" onclick="downloadCurrentSong()" title="下载">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM17 13l-5 5-5-5h3V9h4v4h3z"/></svg>
       </button>
+    </div>
+  </div>
+
+  <!-- iPhone 原生下载辅助弹窗 -->
+  <div class="modal-overlay" id="downloadModal" onclick="closeModal(event)">
+    <div class="modal-box" onclick="event.stopPropagation()">
+      <div class="modal-title">📥 歌曲下载提示</div>
+      <div class="modal-desc">
+        • <b>电脑端</b>：点击下方绿色按钮直接保存音频文件。<br><br>
+        • <b>iPhone 手机端（请按照此步骤）</b>：<br>
+        长按下方绿色按钮 ➔ 在弹出菜单中选择<b>【下载链接的文件】</b>，即可保存到 iPhone 自带的<b>【文件】App</b>！
+      </div>
+      <a id="modalDirectLink" class="modal-btn primary" href="#" target="_blank">长按我【下载链接的文件】</a>
+      <div class="modal-close" onclick="closeModal()">取消并关闭</div>
     </div>
   </div>
 
@@ -411,91 +445,59 @@
   <div id="toast" class="toast">提示信息</div>
 
   <script>
-    // 内置周杰伦经典热歌底库，保证页面首次载入无需等待，0秒秒开
-    const JAY_CHOU_DEFAULTS = [
-      { id: 1, title: '晴天', artist: '周杰伦', album: '叶惠美', coverUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/a4/09/44/a4094403-d6c5-2884-25bf-41f235b8fc6a/0.jpg/400x400bb.jpg', streamUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/4e/cb/36/4ecb36ee-9226-6d8d-29c8-d9d83df24ef6/mzaf_6779435777174438341.plus.aac.p.m4a' },
-      { id: 2, title: '七里香', artist: '周杰伦', album: '七里香', coverUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/a5/d7/f6/a5d7f6e8-ea9a-0fcb-5bf5-ec3910c01fa9/0.jpg/400x400bb.jpg', streamUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/7e/c0/8d/7ec08db8-1e4e-8629-b68c-dbd7d91e6097/mzaf_10526725227708575005.plus.aac.p.m4a' },
-      { id: 3, title: '稻香', artist: '周杰伦', album: '魔杰座', coverUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/80/7e/17/807e1744-8d48-61e8-782a-e666a7b7325c/0.jpg/400x400bb.jpg', streamUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/a5/5a/0c/a55a0ca0-e5bf-5e7c-87d2-7771a396263d/mzaf_6761066710712534572.plus.aac.p.m4a' },
-      { id: 4, title: '青花瓷', artist: '周杰伦', album: '我很忙', coverUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/5a/8e/3c/5a8e3c4b-b0b9-873b-5e4c-1d0169d5ce0b/0.jpg/400x400bb.jpg', streamUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/1b/c4/9d/1bc49df2-51bc-e5a9-f00e-6f8e705b76cf/mzaf_8497673516086749969.plus.aac.p.m4a' },
-      { id: 5, title: '夜曲', artist: '周杰伦', album: '十一月的萧邦', coverUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/21/df/b8/21dfb87f-e2ea-a7f4-d5a2-3f71eb40989f/0.jpg/400x400bb.jpg', streamUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/05/23/e8/0523e80f-90e6-59b4-d754-0417937be199/mzaf_10793616259021437149.plus.aac.p.m4a' },
-      { id: 6, title: '一路向北', artist: '周杰伦', album: 'J III', coverUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/a4/09/44/a4094403-d6c5-2884-25bf-41f235b8fc6a/0.jpg/400x400bb.jpg', streamUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/91/97/52/91975283-e187-5735-a74e-91899e9b3846/mzaf_15024219494393282215.plus.aac.p.m4a' },
-      { id: 7, title: '花海', artist: '周杰伦', album: '魔杰座', coverUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/80/7e/17/807e1744-8d48-61e8-782a-e666a7b7325c/0.jpg/400x400bb.jpg', streamUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/4d/9d/ea/4d9dea1b-c148-3568-d069-450f3b49704e/mzaf_16238210137258384218.plus.aac.p.m4a' },
-      { id: 8, title: '告白气球', artist: '周杰伦', album: '周杰伦的床边故事', coverUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/35/33/c3/3533c3bf-f5f4-3d0d-1349-f53835e98341/0.jpg/400x400bb.jpg', streamUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/ea/98/9b/ea989b53-ae62-c820-27f9-2a0753df1822/mzaf_7875953043229712065.plus.aac.p.m4a' }
-    ];
-
     const state = {
-      tab: 'cn',
-      songs: JAY_CHOU_DEFAULTS,
+      songs: [],
       currentIndex: -1,
       currentSong: null,
-      isPlaying: false,
-      favorites: JSON.parse(localStorage.getItem('my_fav_songs_v3') || '[]')
+      isPlaying: false
     };
 
     const audio = document.getElementById('audioCore');
     const songListEl = document.getElementById('songList');
     const listTitle = document.getElementById('listTitle');
     const listBadge = document.getElementById('listBadge');
-    const favCountEl = document.getElementById('fav-count');
 
     window.addEventListener('DOMContentLoaded', () => {
-      favCountEl.innerText = state.favorites.length;
-      renderSongList(state.songs);
+      // 首次载入默认加载宝宝巴士 200 首海量儿歌
+      queryLibrary('宝宝巴士');
       setupAudioEvents();
     });
 
-    function switchTab(tab) {
-      state.tab = tab;
-      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-      const activeBtn = document.getElementById(`tab-${tab}`);
-      if (activeBtn) activeBtn.classList.add('active');
-
-      if (tab === 'fav') {
-        renderFavorites();
-      } else {
-        const query = document.getElementById('searchInput').value.trim() || '周杰伦';
-        executeSearch(query, tab);
-      }
-    }
-
-    function quickSearch(word) {
-      document.getElementById('searchInput').value = word;
-      if (state.tab === 'fav') switchTab('cn');
-      else executeSearch(word, state.tab);
+    function loadCategory(keyword, el) {
+      document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+      if (el) el.classList.add('active');
+      document.getElementById('searchInput').value = keyword;
+      queryLibrary(keyword);
     }
 
     function triggerSearch() {
       const q = document.getElementById('searchInput').value.trim();
       if (!q) {
-        showToast('请输入歌名或歌手');
+        showToast('请输入关键词');
         return;
       }
-      if (state.tab === 'fav') {
-        state.tab = 'cn';
-        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-        document.getElementById('tab-cn').classList.add('active');
-      }
-      executeSearch(q, state.tab);
+      document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+      queryLibrary(q);
     }
 
     document.getElementById('searchInput').addEventListener('keydown', (e) => {
       if (e.key === 'Enter') triggerSearch();
     });
 
-    // 纯 JSONP 穿透查询（无 CORS 跨域限制，国内网络极速响应）
-    function executeSearch(query, country) {
-      listTitle.innerText = `正在搜索: "${query}"...`;
-      listBadge.innerText = '检索中';
+    // 核心查询逻辑：将 limit 拉满至官方允许的最大值 200！
+    function queryLibrary(keyword) {
+      listTitle.innerText = `正在加载: "${keyword}"...`;
+      listBadge.innerText = '检索中...';
 
-      const cbName = 'jsonp_cb_' + Date.now();
+      const cbName = 'jsonp_big_' + Date.now();
       const script = document.createElement('script');
-      const cleanQ = encodeURIComponent(query);
-      script.src = `https://itunes.apple.com/search?term=${cleanQ}&country=${country}&entity=song&limit=40&callback=${cbName}`;
+      // limit=200 彻底拉满，不再是 40 首！
+      script.src = `https://itunes.apple.com/search?term=${encodeURIComponent(keyword)}&country=hk&entity=song&limit=200&callback=${cbName}`;
 
       const timer = setTimeout(() => {
         cleanup();
-        showToast('网络超时，已保留现有列表');
-      }, 5000);
+        showToast('请求超时，请重试');
+      }, 7000);
 
       function cleanup() {
         clearTimeout(timer);
@@ -511,22 +513,17 @@
             title: item.trackName,
             artist: item.artistName,
             album: item.collectionName || '正版单曲',
-            coverUrl: (item.artworkUrl100 || '').replace('100x100bb', '400x400bb'),
-            streamUrl: item.previewUrl
+            coverImg: (item.artworkUrl100 || '').replace('100x100bb', '300x300bb'),
+            url: item.previewUrl
           }));
-          listTitle.innerText = `搜索: "${query}" (${country === 'cn' ? '大陆区' : '港台区'})`;
-          listBadge.innerText = `找到 ${state.songs.length} 首歌`;
+          listTitle.innerText = `"${keyword}" 搜索结果`;
+          listBadge.innerText = `共加载 ${state.songs.length} 首歌`;
           renderSongList(state.songs);
         } else {
-          listTitle.innerText = `搜索: "${query}"`;
-          listBadge.innerText = '未找到';
-          showToast('未找到该歌曲，可切换【港台曲库】试试');
+          listTitle.innerText = `搜索结果: "${keyword}"`;
+          listBadge.innerText = '0 首';
+          showToast('未找到相关歌曲，换个词试试');
         }
-      };
-
-      script.onerror = function() {
-        cleanup();
-        showToast('请求遇到波动，请重试');
       };
 
       document.body.appendChild(script);
@@ -536,7 +533,6 @@
       songListEl.innerHTML = '';
       songs.forEach((song, index) => {
         const isPlayingThis = state.currentSong && state.currentSong.id === song.id;
-        const isFav = state.favorites.some(f => f.id === song.id);
 
         const card = document.createElement('div');
         card.className = `song-card ${isPlayingThis ? 'playing' : ''}`;
@@ -544,20 +540,15 @@
 
         card.innerHTML = `
           <div class="cover-wrap" onclick="playSong(${index})">
-            <img class="cover-img" src="${song.coverUrl}" alt="cover" loading="lazy">
+            <img class="cover-img" src="${song.coverImg}" alt="cover" loading="lazy">
           </div>
           <div class="song-details" onclick="playSong(${index})">
             <div class="song-title">${escapeHtml(song.title)}</div>
             <div class="song-artist">${escapeHtml(song.artist)} · ${escapeHtml(song.album)}</div>
           </div>
           <div class="song-actions">
-            <button class="action-btn fav ${isFav ? 'active' : ''}" onclick="toggleFav(event, ${index})" title="收藏">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
-              </svg>
-            </button>
-            <button class="action-btn" onclick="downloadSong(event, ${index})" title="下载">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+            <button class="action-btn dl" onclick="openDownloadModal(event, ${index})" title="下载音频">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
                 <path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM17 13l-5 5-5-5h3V9h4v4h3z"/>
               </svg>
             </button>
@@ -573,7 +564,7 @@
       const song = state.songs[index];
       state.currentSong = song;
 
-      audio.src = song.streamUrl;
+      audio.src = song.url;
       audio.play().then(() => {
         state.isPlaying = true;
         updatePlayerUI();
@@ -604,7 +595,7 @@
     function updatePlayerUI() {
       const song = state.currentSong;
       if (!song) return;
-      document.getElementById('playerCover').src = song.coverUrl;
+      document.getElementById('playerCover').src = song.coverImg;
       document.getElementById('playerTitle').innerText = song.title;
       document.getElementById('playerArtist').innerText = `${song.artist} · ${song.album}`;
       document.getElementById('playIcon').style.display = state.isPlaying ? 'none' : 'block';
@@ -618,51 +609,25 @@
       });
     }
 
-    function toggleFav(e, index) {
-      e.stopPropagation();
-      const song = state.songs[index];
-      const idx = state.favorites.findIndex(f => f.id === song.id);
-      if (idx >= 0) {
-        state.favorites.splice(idx, 1);
-        showToast('已取消收藏');
-      } else {
-        state.favorites.unshift(song);
-        showToast('已加入收藏');
-      }
-      localStorage.setItem('my_fav_songs_v3', JSON.stringify(state.favorites));
-      favCountEl.innerText = state.favorites.length;
-      if (state.tab === 'fav') renderFavorites();
-      else e.currentTarget.classList.toggle('active', idx < 0);
-    }
-
-    function renderFavorites() {
-      listTitle.innerText = '我的收藏夹';
-      listBadge.innerText = `共 ${state.favorites.length} 首`;
-      state.songs = state.favorites;
-      if (state.favorites.length === 0) {
-        songListEl.innerHTML = '<div style="text-align:center;padding:40px;color:var(--text-sub);">收藏夹是空的，快去添加吧~</div>';
-      } else {
-        renderSongList(state.favorites);
-      }
-    }
-
-    function downloadSong(e, index) {
+    function openDownloadModal(e, index) {
       if (e) e.stopPropagation();
       const song = state.songs[index];
-      if (!song || !song.streamUrl) return;
-      showToast(`正在打开下载: ${song.title}`);
-      const a = document.createElement('a');
-      a.href = song.streamUrl;
-      a.target = '_blank';
-      a.download = `${song.artist} - ${song.title}.m4a`;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
+      if (!song || !song.url) return;
+
+      const directLink = document.getElementById('modalDirectLink');
+      directLink.href = song.url;
+      directLink.setAttribute('download', `${song.artist} - ${song.title}.m4a`);
+
+      document.getElementById('downloadModal').style.display = 'flex';
     }
 
     function downloadCurrentSong() {
-      if (state.currentIndex >= 0) downloadSong(null, state.currentIndex);
+      if (state.currentIndex >= 0) openDownloadModal(null, state.currentIndex);
       else showToast('当前未选择歌曲');
+    }
+
+    function closeModal() {
+      document.getElementById('downloadModal').style.display = 'none';
     }
 
     function showToast(msg) {
