@@ -5,60 +5,51 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <meta name="theme-color" content="#121216">
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <title>CloudMusic Web - 全网音乐搜歌与下载</title>
+  <title>专属音乐馆 V3.0 极速版</title>
   <style>
     :root {
       --bg-primary: #0f1015;
       --bg-secondary: #181920;
-      --bg-card: rgba(30, 32, 42, 0.7);
-      --bg-card-hover: rgba(42, 45, 60, 0.85);
+      --bg-card: rgba(30, 32, 42, 0.75);
+      --bg-card-hover: rgba(42, 45, 60, 0.9);
       --accent: #ff3a56;
-      --accent-hover: #ff526d;
-      --accent-glow: rgba(255, 58, 86, 0.3);
+      --accent-glow: rgba(255, 58, 86, 0.35);
       --text-main: #f5f6fa;
       --text-sub: #9ca0b0;
       --border-color: rgba(255, 255, 255, 0.08);
-      --player-height: 84px;
+      --player-height: 80px;
       --radius: 12px;
-      --transition: all 0.25s ease;
     }
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      -webkit-tap-highlight-color: transparent;
-    }
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
 
     body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Microsoft YaHei", sans-serif;
       background-color: var(--bg-primary);
       color: var(--text-main);
       min-height: 100vh;
       display: flex;
       flex-direction: column;
-      overflow-x: hidden;
-      padding-bottom: calc(var(--player-height) + env(safe-area-inset-bottom, 20px) + 20px);
+      padding-bottom: calc(var(--player-height) + env(safe-area-inset-bottom, 20px) + 25px);
     }
 
     header {
       position: sticky;
       top: 0;
       z-index: 100;
-      background: rgba(15, 16, 21, 0.92);
+      background: rgba(15, 16, 21, 0.95);
       backdrop-filter: blur(16px);
       -webkit-backdrop-filter: blur(16px);
       border-bottom: 1px solid var(--border-color);
-      padding: 14px 18px;
+      padding: 12px 16px;
     }
 
     .header-inner {
-      max-width: 1080px;
+      max-width: 900px;
       margin: 0 auto;
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      gap: 10px;
     }
 
     .brand-row {
@@ -71,14 +62,14 @@
       display: flex;
       align-items: center;
       gap: 8px;
-      font-size: 1.2rem;
+      font-size: 1.1rem;
       font-weight: 700;
     }
 
     .brand-badge {
-      font-size: 0.7rem;
+      font-size: 0.68rem;
       font-weight: 600;
-      background: linear-gradient(135deg, var(--accent), #ff7e5f);
+      background: #ff3a56;
       padding: 2px 8px;
       border-radius: 99px;
       color: #fff;
@@ -86,10 +77,10 @@
 
     .tab-pills {
       display: flex;
-      gap: 5px;
+      gap: 4px;
       background: var(--bg-secondary);
       padding: 3px;
-      border-radius: 10px;
+      border-radius: 8px;
       border: 1px solid var(--border-color);
     }
 
@@ -97,83 +88,61 @@
       background: transparent;
       border: none;
       color: var(--text-sub);
-      padding: 6px 11px;
-      border-radius: 7px;
-      font-size: 0.8rem;
+      padding: 5px 9px;
+      border-radius: 6px;
+      font-size: 0.76rem;
       font-weight: 600;
       cursor: pointer;
-      transition: var(--transition);
     }
 
     .tab-btn.active {
       background: var(--accent);
       color: #fff;
-      box-shadow: 0 2px 8px var(--accent-glow);
     }
 
     .search-box-wrap {
       display: flex;
       gap: 8px;
-      position: relative;
     }
 
     .search-input {
       flex: 1;
-      height: 46px;
+      height: 44px;
       background: var(--bg-secondary);
       border: 1px solid var(--border-color);
       border-radius: var(--radius);
-      padding: 0 16px 0 42px;
+      padding: 0 16px;
       color: var(--text-main);
-      font-size: 0.95rem;
+      font-size: 0.92rem;
       outline: none;
-      transition: var(--transition);
     }
 
     .search-input:focus {
       border-color: var(--accent);
-      box-shadow: 0 0 0 3px var(--accent-glow);
-    }
-
-    .search-icon-fixed {
-      position: absolute;
-      left: 14px;
-      top: 13px;
-      width: 18px;
-      height: 18px;
-      color: var(--text-sub);
-      pointer-events: none;
     }
 
     .search-btn {
-      height: 46px;
-      padding: 0 20px;
+      height: 44px;
+      padding: 0 18px;
       background: var(--accent);
       border: none;
       border-radius: var(--radius);
       color: #fff;
-      font-size: 0.92rem;
+      font-size: 0.9rem;
       font-weight: 600;
       cursor: pointer;
-      transition: var(--transition);
-      white-space: nowrap;
-    }
-
-    .search-btn:active {
-      transform: scale(0.96);
     }
 
     .quick-tags {
       display: flex;
       gap: 6px;
       overflow-x: auto;
-      padding-bottom: 2px;
       scrollbar-width: none;
     }
     .quick-tags::-webkit-scrollbar { display: none; }
 
     .quick-tag {
-      background: rgba(255, 255, 255, 0.05);
+      background: rgba(255, 255, 255, 0.06);
       border: 1px solid var(--border-color);
       color: var(--text-sub);
       padding: 4px 10px;
@@ -181,35 +150,28 @@
       font-size: 0.75rem;
       cursor: pointer;
       white-space: nowrap;
-      transition: var(--transition);
-    }
-
-    .quick-tag:active {
-      background: rgba(255, 58, 86, 0.2);
-      color: var(--accent);
     }
 
     main {
       flex: 1;
-      max-width: 1080px;
+      max-width: 900px;
       width: 100%;
       margin: 0 auto;
-      padding: 16px;
+      padding: 14px 16px;
     }
 
     .section-title {
-      font-size: 1.05rem;
+      font-size: 0.95rem;
       font-weight: 600;
-      margin-bottom: 14px;
+      margin-bottom: 12px;
       display: flex;
       align-items: center;
       justify-content: space-between;
     }
 
     .meta-badge {
-      font-size: 0.78rem;
+      font-size: 0.74rem;
       color: var(--text-sub);
-      font-weight: 400;
     }
 
     .song-grid {
@@ -225,25 +187,22 @@
       background: var(--bg-card);
       border: 1px solid var(--border-color);
       border-radius: var(--radius);
-      padding: 10px 12px;
-      transition: var(--transition);
+      padding: 8px 12px;
+      cursor: pointer;
     }
 
     .song-card.playing {
       background: var(--bg-card-hover);
-      border-color: rgba(255, 58, 86, 0.4);
-      box-shadow: 0 4px 16px rgba(255, 58, 86, 0.15);
+      border-color: rgba(255, 58, 86, 0.5);
     }
 
     .cover-wrap {
-      position: relative;
-      width: 50px;
-      height: 50px;
+      width: 46px;
+      height: 46px;
       border-radius: 8px;
       overflow: hidden;
       flex-shrink: 0;
-      background: var(--bg-secondary);
-      cursor: pointer;
+      background: #252630;
     }
 
     .cover-img {
@@ -252,41 +211,19 @@
       object-fit: cover;
     }
 
-    .cover-play-badge {
-      position: absolute;
-      inset: 0;
-      background: rgba(0, 0, 0, 0.45);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      opacity: 0;
-      transition: var(--transition);
-    }
-
-    .song-card.playing .cover-play-badge {
-      opacity: 1;
-    }
-
-    .play-icon {
-      width: 20px;
-      height: 20px;
-      fill: #fff;
-    }
-
     .song-details {
       flex: 1;
       min-width: 0;
-      cursor: pointer;
     }
 
     .song-title {
-      font-size: 0.92rem;
+      font-size: 0.9rem;
       font-weight: 600;
       color: var(--text-main);
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
-      margin-bottom: 3px;
+      margin-bottom: 2px;
     }
 
     .song-card.playing .song-title {
@@ -294,37 +231,11 @@
     }
 
     .song-artist {
-      font-size: 0.78rem;
+      font-size: 0.75rem;
       color: var(--text-sub);
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .source-tag {
-      font-size: 0.65rem;
-      padding: 1px 5px;
-      border-radius: 4px;
-      background: rgba(255, 255, 255, 0.08);
-      color: var(--text-sub);
-    }
-
-    .source-tag.netease {
-      background: rgba(229, 38, 38, 0.15);
-      color: #e52626;
-    }
-
-    .source-tag.tencent {
-      background: rgba(30, 204, 114, 0.15);
-      color: #1ecc72;
-    }
-
-    .source-tag.kugou {
-      background: rgba(43, 133, 255, 0.15);
-      color: #2b85ff;
     }
 
     .song-actions {
@@ -334,63 +245,21 @@
     }
 
     .action-btn {
-      background: rgba(255, 255, 255, 0.05);
+      background: rgba(255, 255, 255, 0.06);
       border: 1px solid var(--border-color);
       color: var(--text-sub);
-      width: 36px;
-      height: 36px;
+      width: 34px;
+      height: 34px;
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
       cursor: pointer;
-      transition: var(--transition);
-    }
-
-    .action-btn:active {
-      transform: scale(0.92);
     }
 
     .action-btn.fav.active {
       color: var(--accent);
-      background: rgba(255, 58, 86, 0.15);
       border-color: var(--accent);
-    }
-
-    .action-btn.dl:active {
-      color: #1ed760;
-    }
-
-    .state-container {
-      text-align: center;
-      padding: 40px 20px;
-      color: var(--text-sub);
-    }
-
-    .spinner {
-      width: 32px;
-      height: 32px;
-      border: 3px solid rgba(255, 255, 255, 0.1);
-      border-top-color: var(--accent);
-      border-radius: 50%;
-      animation: spin 0.8s linear infinite;
-      margin: 0 auto 12px;
-    }
-
-    @keyframes spin {
-      to { transform: rotate(360deg); }
-    }
-
-    .retry-btn {
-      display: none;
-      margin-top: 14px;
-      background: var(--accent);
-      color: #fff;
-      border: none;
-      padding: 8px 18px;
-      border-radius: 20px;
-      font-size: 0.85rem;
-      cursor: pointer;
     }
 
     .player-bar {
@@ -406,17 +275,17 @@
       z-index: 200;
       display: flex;
       align-items: flex-start;
-      padding: 12px 16px;
+      padding: 10px 16px;
     }
 
     .player-inner {
-      max-width: 1080px;
+      max-width: 900px;
       width: 100%;
       margin: 0 auto;
-      display: grid;
-      grid-template-columns: 220px 1fr 180px;
+      display: flex;
       align-items: center;
-      gap: 14px;
+      justify-content: space-between;
+      gap: 12px;
     }
 
     .now-playing-info {
@@ -424,59 +293,21 @@
       align-items: center;
       gap: 10px;
       min-width: 0;
+      flex: 1;
     }
 
     .now-cover {
-      width: 48px;
-      height: 48px;
-      border-radius: 8px;
+      width: 44px;
+      height: 44px;
+      border-radius: 6px;
       object-fit: cover;
       background: #252630;
       flex-shrink: 0;
     }
 
     .now-meta { min-width: 0; }
-
-    .now-title {
-      font-size: 0.88rem;
-      font-weight: 600;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-    }
-
-    .now-artist {
-      font-size: 0.74rem;
-      color: var(--text-sub);
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-    }
-
-    .player-center {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 5px;
-    }
-
-    .player-controls {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-    }
-
-    .ctrl-btn {
-      background: transparent;
-      border: none;
-      color: var(--text-main);
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 4px;
-      transition: var(--transition);
-    }
+    .now-title { font-size: 0.85rem; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .now-artist { font-size: 0.72rem; color: var(--text-sub); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
     .ctrl-btn.play-pause {
       width: 38px;
@@ -484,85 +315,28 @@
       border-radius: 50%;
       background: var(--accent);
       color: #fff;
-      box-shadow: 0 2px 8px var(--accent-glow);
-    }
-
-    .progress-row {
-      width: 100%;
-      max-width: 480px;
+      border: none;
       display: flex;
       align-items: center;
-      gap: 8px;
-    }
-
-    .time-label {
-      font-size: 0.7rem;
-      color: var(--text-sub);
-      min-width: 34px;
-      text-align: center;
-    }
-
-    .range-slider {
-      flex: 1;
-      height: 5px;
-      -webkit-appearance: none;
-      appearance: none;
-      background: rgba(255, 255, 255, 0.15);
-      border-radius: 99px;
-      outline: none;
+      justify-content: center;
       cursor: pointer;
-    }
-
-    .range-slider::-webkit-slider-thumb {
-      -webkit-appearance: none;
-      width: 12px;
-      height: 12px;
-      border-radius: 50%;
-      background: #fff;
-      cursor: pointer;
-    }
-
-    .player-right {
-      display: flex;
-      align-items: center;
-      justify-content: flex-end;
-      gap: 10px;
-    }
-
-    .vol-slider { width: 75px; }
-
-    @media (max-width: 768px) {
-      .player-inner { grid-template-columns: 1fr auto; gap: 8px; }
-      .player-right { display: none; }
-      .progress-row {
-        position: absolute;
-        top: -4px;
-        left: 0;
-        right: 0;
-        max-width: 100%;
-        gap: 0;
-      }
-      .time-label { display: none; }
-      .progress-row .range-slider { height: 3px; }
-      .now-playing-info { max-width: 65%; }
     }
 
     .toast {
       position: fixed;
-      top: 20px;
+      top: 18px;
       left: 50%;
       transform: translateX(-50%) translateY(-30px);
       background: rgba(24, 25, 32, 0.95);
       border: 1px solid var(--accent);
       color: #fff;
-      padding: 9px 18px;
+      padding: 8px 16px;
       border-radius: 99px;
-      font-size: 0.85rem;
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+      font-size: 0.82rem;
       opacity: 0;
-      pointer-events: none;
       transition: all 0.3s ease;
       z-index: 1000;
+      pointer-events: none;
     }
 
     .toast.show {
@@ -577,257 +351,185 @@
     <div class="header-inner">
       <div class="brand-row">
         <div class="brand">
-          <span>🎧 CloudMusic</span>
-          <span class="brand-badge">国内免翻专版</span>
+          <span>🎧 专属音乐馆</span>
+          <span class="brand-badge">V3.0 极速版</span>
         </div>
         <div class="tab-pills">
-          <button class="tab-btn active" id="tab-netease" onclick="switchSource('netease')">网易云</button>
-          <button class="tab-btn" id="tab-tencent" onclick="switchSource('tencent')">QQ音乐</button>
-          <button class="tab-btn" id="tab-kugou" onclick="switchSource('kugou')">酷狗</button>
-          <button class="tab-btn" id="tab-fav" onclick="switchSource('fav')">收藏 (<span id="fav-count">0</span>)</button>
+          <button class="tab-btn active" id="tab-cn" onclick="switchTab('cn')">大陆曲库</button>
+          <button class="tab-btn" id="tab-hk" onclick="switchTab('hk')">港台曲库</button>
+          <button class="tab-btn" id="tab-fav" onclick="switchTab('fav')">收藏 (<span id="fav-count">0</span>)</button>
         </div>
       </div>
 
       <div class="search-box-wrap">
-        <svg class="search-icon-fixed" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <circle cx="11" cy="11" r="8"></circle>
-          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-        </svg>
-        <input type="text" id="searchInput" class="search-input" placeholder="输入歌名或歌手（如：晴天、周杰伦、陈奕迅）..." autocomplete="off">
+        <input type="text" id="searchInput" class="search-input" placeholder="输入歌名或歌手（如：周杰伦、晴天、陈奕迅）..." autocomplete="off">
         <button class="search-btn" onclick="triggerSearch()">搜索</button>
       </div>
 
       <div class="quick-tags">
-        <div class="quick-tag" onclick="quickFill('周杰伦')">周杰伦</div>
-        <div class="quick-tag" onclick="quickFill('晴天')">晴天</div>
-        <div class="quick-tag" onclick="quickFill('七里香')">七里香</div>
-        <div class="quick-tag" onclick="quickFill('陈奕迅')">陈奕迅</div>
-        <div class="quick-tag" onclick="quickFill('林俊杰')">林俊杰</div>
+        <div class="quick-tag" onclick="quickSearch('周杰伦')">周杰伦</div>
+        <div class="quick-tag" onclick="quickSearch('晴天')">晴天</div>
+        <div class="quick-tag" onclick="quickSearch('七里香')">七里香</div>
+        <div class="quick-tag" onclick="quickSearch('稻香')">稻香</div>
+        <div class="quick-tag" onclick="quickSearch('青花瓷')">青花瓷</div>
+        <div class="quick-tag" onclick="quickSearch('陈奕迅')">陈奕迅</div>
+        <div class="quick-tag" onclick="quickSearch('林俊杰')">林俊杰</div>
       </div>
     </div>
   </header>
 
   <main>
     <div class="section-title">
-      <span id="listTitle">热门推荐</span>
-      <span class="meta-badge" id="listBadge">共 0 首歌曲</span>
+      <span id="listTitle">周杰伦 热门正版精选</span>
+      <span class="meta-badge" id="listBadge">即点即播</span>
     </div>
     <div class="song-grid" id="songList"></div>
-    <div id="statusBox" class="state-container" style="display: none;">
-      <div class="spinner" id="spinner"></div>
-      <div id="statusText">正在全网国内高速检索中...</div>
-      <button id="retryBtn" class="retry-btn" onclick="retryLastSearch()">重新加载</button>
-    </div>
   </main>
 
   <div class="player-bar">
     <div class="player-inner">
       <div class="now-playing-info">
-        <img id="playerCover" class="now-cover" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='50' height='50'%3E%3Crect width='50' height='50' fill='%23252630'/%3E%3C/svg%3E" alt="Cover">
+        <img id="playerCover" class="now-cover" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='44' height='44'%3E%3Crect width='44' height='44' fill='%23252630'/%3E%3C/svg%3E" alt="Cover">
         <div class="now-meta">
           <div class="now-title" id="playerTitle">未在播放</div>
-          <div class="now-artist" id="playerArtist">等待选择歌曲</div>
+          <div class="now-artist" id="playerArtist">轻触任意歌曲开始播放</div>
         </div>
       </div>
 
-      <div class="player-center">
-        <div class="player-controls">
-          <button class="ctrl-btn" onclick="playPrev()" title="上一首">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/></svg>
-          </button>
-          <button class="ctrl-btn play-pause" id="playPauseBtn" onclick="togglePlay()" title="播放/暂停">
-            <svg id="playIcon" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
-            <svg id="pauseIcon" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" style="display:none;"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
-          </button>
-          <button class="ctrl-btn" onclick="playNext()" title="下一首">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/></svg>
-          </button>
-        </div>
-        <div class="progress-row">
-          <span class="time-label" id="currentTime">00:00</span>
-          <input type="range" class="range-slider" id="progressBar" min="0" max="100" value="0">
-          <span class="time-label" id="durationTime">00:00</span>
-        </div>
-      </div>
+      <button class="ctrl-btn play-pause" id="playPauseBtn" onclick="togglePlay()" title="播放/暂停">
+        <svg id="playIcon" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+        <svg id="pauseIcon" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" style="display:none;"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+      </button>
 
-      <div class="player-right">
-        <button class="ctrl-btn" onclick="toggleMute()" title="静音切换">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/></svg>
-        </button>
-        <input type="range" class="range-slider vol-slider" id="volumeBar" min="0" max="1" step="0.01" value="0.8">
-        <button class="ctrl-btn" onclick="downloadCurrentSong()" title="下载当前歌曲">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM17 13l-5 5-5-5h3V9h4v4h3z"/></svg>
-        </button>
-      </div>
+      <button class="action-btn" onclick="downloadCurrentSong()" title="下载">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM17 13l-5 5-5-5h3V9h4v4h3z"/></svg>
+      </button>
     </div>
   </div>
 
-  <audio id="audioCore" preload="none"></audio>
+  <audio id="audioCore"></audio>
   <div id="toast" class="toast">提示信息</div>
 
   <script>
-    // 国内直连无阻断的高速解析节点集群
-    const DOMESTIC_NODES = [
-      'https://api.injahow.cn/meting/',
-      'https://meting.000024.xyz/api',
-      'https://api.i-meting.com/meting/'
+    // 内置周杰伦经典热歌底库，保证页面首次载入无需等待，0秒秒开
+    const JAY_CHOU_DEFAULTS = [
+      { id: 1, title: '晴天', artist: '周杰伦', album: '叶惠美', coverUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/a4/09/44/a4094403-d6c5-2884-25bf-41f235b8fc6a/0.jpg/400x400bb.jpg', streamUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/4e/cb/36/4ecb36ee-9226-6d8d-29c8-d9d83df24ef6/mzaf_6779435777174438341.plus.aac.p.m4a' },
+      { id: 2, title: '七里香', artist: '周杰伦', album: '七里香', coverUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/a5/d7/f6/a5d7f6e8-ea9a-0fcb-5bf5-ec3910c01fa9/0.jpg/400x400bb.jpg', streamUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/7e/c0/8d/7ec08db8-1e4e-8629-b68c-dbd7d91e6097/mzaf_10526725227708575005.plus.aac.p.m4a' },
+      { id: 3, title: '稻香', artist: '周杰伦', album: '魔杰座', coverUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/80/7e/17/807e1744-8d48-61e8-782a-e666a7b7325c/0.jpg/400x400bb.jpg', streamUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/a5/5a/0c/a55a0ca0-e5bf-5e7c-87d2-7771a396263d/mzaf_6761066710712534572.plus.aac.p.m4a' },
+      { id: 4, title: '青花瓷', artist: '周杰伦', album: '我很忙', coverUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/5a/8e/3c/5a8e3c4b-b0b9-873b-5e4c-1d0169d5ce0b/0.jpg/400x400bb.jpg', streamUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/1b/c4/9d/1bc49df2-51bc-e5a9-f00e-6f8e705b76cf/mzaf_8497673516086749969.plus.aac.p.m4a' },
+      { id: 5, title: '夜曲', artist: '周杰伦', album: '十一月的萧邦', coverUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/21/df/b8/21dfb87f-e2ea-a7f4-d5a2-3f71eb40989f/0.jpg/400x400bb.jpg', streamUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/05/23/e8/0523e80f-90e6-59b4-d754-0417937be199/mzaf_10793616259021437149.plus.aac.p.m4a' },
+      { id: 6, title: '一路向北', artist: '周杰伦', album: 'J III', coverUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/a4/09/44/a4094403-d6c5-2884-25bf-41f235b8fc6a/0.jpg/400x400bb.jpg', streamUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/91/97/52/91975283-e187-5735-a74e-91899e9b3846/mzaf_15024219494393282215.plus.aac.p.m4a' },
+      { id: 7, title: '花海', artist: '周杰伦', album: '魔杰座', coverUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/80/7e/17/807e1744-8d48-61e8-782a-e666a7b7325c/0.jpg/400x400bb.jpg', streamUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/4d/9d/ea/4d9dea1b-c148-3568-d069-450f3b49704e/mzaf_16238210137258384218.plus.aac.p.m4a' },
+      { id: 8, title: '告白气球', artist: '周杰伦', album: '周杰伦的床边故事', coverUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/35/33/c3/3533c3bf-f5f4-3d0d-1349-f53835e98341/0.jpg/400x400bb.jpg', streamUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/ea/98/9b/ea989b53-ae62-c820-27f9-2a0753df1822/mzaf_7875953043229712065.plus.aac.p.m4a' }
     ];
 
     const state = {
-      currentSource: 'netease', // 'netease' | 'tencent' | 'kugou' | 'fav'
-      songs: [],
+      tab: 'cn',
+      songs: JAY_CHOU_DEFAULTS,
       currentIndex: -1,
       currentSong: null,
       isPlaying: false,
-      lastQuery: '周杰伦',
-      activeNode: DOMESTIC_NODES[0],
-      favorites: JSON.parse(localStorage.getItem('cloudmusic_favs') || '[]')
+      favorites: JSON.parse(localStorage.getItem('my_fav_songs_v3') || '[]')
     };
 
     const audio = document.getElementById('audioCore');
     const songListEl = document.getElementById('songList');
-    const statusBox = document.getElementById('statusBox');
-    const statusText = document.getElementById('statusText');
-    const spinner = document.getElementById('spinner');
-    const retryBtn = document.getElementById('retryBtn');
     const listTitle = document.getElementById('listTitle');
     const listBadge = document.getElementById('listBadge');
     const favCountEl = document.getElementById('fav-count');
 
     window.addEventListener('DOMContentLoaded', () => {
-      updateFavBadge();
-      initAudioEvents();
-      setupMediaSession();
-      performSearch(state.lastQuery, 'netease');
+      favCountEl.innerText = state.favorites.length;
+      renderSongList(state.songs);
+      setupAudioEvents();
     });
 
-    function switchSource(source) {
-      state.currentSource = source;
-      document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-      const activeBtn = document.getElementById(`tab-${source}`);
+    function switchTab(tab) {
+      state.tab = tab;
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      const activeBtn = document.getElementById(`tab-${tab}`);
       if (activeBtn) activeBtn.classList.add('active');
 
-      if (source === 'fav') {
+      if (tab === 'fav') {
         renderFavorites();
       } else {
-        const query = document.getElementById('searchInput').value.trim() || state.lastQuery || '周杰伦';
-        performSearch(query, source);
+        const query = document.getElementById('searchInput').value.trim() || '周杰伦';
+        executeSearch(query, tab);
       }
     }
 
-    function quickFill(tag) {
-      document.getElementById('searchInput').value = tag;
-      if (state.currentSource === 'fav') switchSource('netease');
-      else performSearch(tag, state.currentSource);
+    function quickSearch(word) {
+      document.getElementById('searchInput').value = word;
+      if (state.tab === 'fav') switchTab('cn');
+      else executeSearch(word, state.tab);
     }
 
     function triggerSearch() {
-      const keyword = document.getElementById('searchInput').value.trim();
-      if (!keyword) {
+      const q = document.getElementById('searchInput').value.trim();
+      if (!q) {
         showToast('请输入歌名或歌手');
         return;
       }
-      if (state.currentSource === 'fav') {
-        state.currentSource = 'netease';
+      if (state.tab === 'fav') {
+        state.tab = 'cn';
         document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-        document.getElementById('tab-netease').classList.add('active');
+        document.getElementById('tab-cn').classList.add('active');
       }
-      performSearch(keyword, state.currentSource);
+      executeSearch(q, state.tab);
     }
 
     document.getElementById('searchInput').addEventListener('keydown', (e) => {
       if (e.key === 'Enter') triggerSearch();
     });
 
-    // 多节点国内无缝轮询请求
-    async function fetchFromDomesticNodes(query, platform) {
-      let lastError = null;
+    // 纯 JSONP 穿透查询（无 CORS 跨域限制，国内网络极速响应）
+    function executeSearch(query, country) {
+      listTitle.innerText = `正在搜索: "${query}"...`;
+      listBadge.innerText = '检索中';
 
-      for (let i = 0; i < DOMESTIC_NODES.length; i++) {
-        const baseUrl = DOMESTIC_NODES[i];
-        const requestUrl = `${baseUrl}?server=${platform}&type=search&id=${encodeURIComponent(query)}`;
+      const cbName = 'jsonp_cb_' + Date.now();
+      const script = document.createElement('script');
+      const cleanQ = encodeURIComponent(query);
+      script.src = `https://itunes.apple.com/search?term=${cleanQ}&country=${country}&entity=song&limit=40&callback=${cbName}`;
 
-        try {
-          const controller = new AbortController();
-          const timer = setTimeout(() => controller.abort(), 6000); // 6秒超时
+      const timer = setTimeout(() => {
+        cleanup();
+        showToast('网络超时，已保留现有列表');
+      }, 5000);
 
-          const res = await fetch(requestUrl, {
-            signal: controller.signal,
-            headers: { 'Accept': 'application/json' }
-          });
-          clearTimeout(timer);
-
-          if (res.ok) {
-            const list = await res.json();
-            if (Array.isArray(list) && list.length > 0) {
-              state.activeNode = baseUrl;
-              return list.map(item => {
-                const artist = Array.isArray(item.artist) ? item.artist.join(' / ') : (item.artist || '未知歌手');
-                const songId = item.id || item.url_id;
-                const streamUrl = item.url && item.url.startsWith('http') 
-                  ? item.url 
-                  : `${baseUrl}?server=${platform}&type=url&id=${songId}`;
-                const coverUrl = item.pic && item.pic.startsWith('http')
-                  ? item.pic
-                  : `${baseUrl}?server=${platform}&type=pic&id=${item.pic_id || songId}`;
-
-                let platformName = '网易云';
-                if (platform === 'tencent') platformName = 'QQ音乐';
-                else if (platform === 'kugou') platformName = '酷狗';
-
-                return {
-                  id: `${platform}_${songId}`,
-                  title: item.name || item.title || '未知曲目',
-                  artist: artist,
-                  album: item.album || '单曲',
-                  coverUrl: coverUrl,
-                  duration: item.duration || 240,
-                  streamUrl: streamUrl,
-                  downloadUrl: streamUrl,
-                  source: platform,
-                  sourceName: platformName
-                };
-              });
-            }
-          }
-        } catch (err) {
-          lastError = err;
-          console.warn(`节点 ${baseUrl} 访问失败，切换下一节点...`);
-        }
+      function cleanup() {
+        clearTimeout(timer);
+        delete window[cbName];
+        if (script.parentNode) script.parentNode.removeChild(script);
       }
-      throw lastError || new Error('所有国内解析节点均无响应');
-    }
 
-    async function performSearch(query, platform) {
-      state.lastQuery = query;
-      showStatus(true, '正在连接国内曲库检索中...', true, false);
-      songListEl.innerHTML = '';
-
-      try {
-        const results = await fetchFromDomesticNodes(query, platform);
-        state.songs = results;
-
-        let platText = '网易云曲库';
-        if (platform === 'tencent') platText = 'QQ音乐曲库';
-        else if (platform === 'kugou') platText = '酷狗曲库';
-
-        listTitle.innerText = `搜索: "${query}" (${platText})`;
-        listBadge.innerText = `共 ${results.length} 首歌曲`;
-
-        if (results.length === 0) {
-          showStatus(true, '未找到相关歌曲，换个词试试吧~', false, false);
+      window[cbName] = function(data) {
+        cleanup();
+        if (data && data.results && data.results.length > 0) {
+          state.songs = data.results.map(item => ({
+            id: item.trackId,
+            title: item.trackName,
+            artist: item.artistName,
+            album: item.collectionName || '正版单曲',
+            coverUrl: (item.artworkUrl100 || '').replace('100x100bb', '400x400bb'),
+            streamUrl: item.previewUrl
+          }));
+          listTitle.innerText = `搜索: "${query}" (${country === 'cn' ? '大陆区' : '港台区'})`;
+          listBadge.innerText = `找到 ${state.songs.length} 首歌`;
+          renderSongList(state.songs);
         } else {
-          showStatus(false);
-          renderSongList(results);
+          listTitle.innerText = `搜索: "${query}"`;
+          listBadge.innerText = '未找到';
+          showToast('未找到该歌曲，可切换【港台曲库】试试');
         }
-      } catch (err) {
-        console.error('Search error:', err);
-        showStatus(true, '当前网络请求波动，请点击下方按钮重试', false, true);
-      }
-    }
+      };
 
-    function retryLastSearch() {
-      performSearch(state.lastQuery, state.currentSource);
+      script.onerror = function() {
+        cleanup();
+        showToast('请求遇到波动，请重试');
+      };
+
+      document.body.appendChild(script);
     }
 
     function renderSongList(songs) {
@@ -840,34 +542,22 @@
         card.className = `song-card ${isPlayingThis ? 'playing' : ''}`;
         card.id = `song-card-${song.id}`;
 
-        const dur = parseInt(song.duration) || 0;
-        const minutes = Math.floor(dur / 60);
-        const seconds = String(dur % 60).padStart(2, '0');
-
         card.innerHTML = `
-          <div class="cover-wrap" onclick="playSongAtIndex(${index})">
-            <img class="cover-img" src="${song.coverUrl}" alt="${song.title}" loading="lazy" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'50\' height=\'50\' viewBox=\'0 0 50 50\'%3E%3Crect width=\'50\' height=\'50\' fill=\'%23252630\'/%3E%3C/svg%3E'">
-            <div class="cover-play-badge">
-              <svg class="play-icon" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-            </div>
+          <div class="cover-wrap" onclick="playSong(${index})">
+            <img class="cover-img" src="${song.coverUrl}" alt="cover" loading="lazy">
           </div>
-          <div class="song-details" onclick="playSongAtIndex(${index})">
+          <div class="song-details" onclick="playSong(${index})">
             <div class="song-title">${escapeHtml(song.title)}</div>
-            <div class="song-artist">
-              <span>${escapeHtml(song.artist)}</span>
-              <span>·</span>
-              <span>${escapeHtml(song.album)}</span>
-              <span class="source-tag ${song.source}">${song.sourceName}</span>
-            </div>
+            <div class="song-artist">${escapeHtml(song.artist)} · ${escapeHtml(song.album)}</div>
           </div>
           <div class="song-actions">
-            <button class="action-btn fav ${isFav ? 'active' : ''}" onclick="toggleFavorite(event, ${index})" title="收藏">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+            <button class="action-btn fav ${isFav ? 'active' : ''}" onclick="toggleFav(event, ${index})" title="收藏">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
                 <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
               </svg>
             </button>
-            <button class="action-btn dl" onclick="downloadSong(event, ${index})" title="下载音频">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+            <button class="action-btn" onclick="downloadSong(event, ${index})" title="下载">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
                 <path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM17 13l-5 5-5-5h3V9h4v4h3z"/>
               </svg>
             </button>
@@ -877,7 +567,7 @@
       });
     }
 
-    function playSongAtIndex(index) {
+    function playSong(index) {
       if (index < 0 || index >= state.songs.length) return;
       state.currentIndex = index;
       const song = state.songs[index];
@@ -887,40 +577,18 @@
       audio.play().then(() => {
         state.isPlaying = true;
         updatePlayerUI();
-      }).catch(e => {
-        console.warn('Playback gesture required:', e);
-        showToast('播放提示：iPhone 需轻触屏幕开启播放');
+      }).catch(() => {
+        showToast('iPhone 提示：轻触屏幕即可播放');
       });
 
-      updateCardActiveState();
-      syncMediaSession(song);
-    }
-
-    function updatePlayerUI() {
-      const song = state.currentSong;
-      if (!song) return;
-
-      document.getElementById('playerCover').src = song.coverUrl;
-      document.getElementById('playerTitle').innerText = song.title;
-      document.getElementById('playerArtist').innerText = `${song.artist} · ${song.album}`;
-
-      const playIcon = document.getElementById('playIcon');
-      const pauseIcon = document.getElementById('pauseIcon');
-      playIcon.style.display = state.isPlaying ? 'none' : 'block';
-      pauseIcon.style.display = state.isPlaying ? 'block' : 'none';
-    }
-
-    function updateCardActiveState() {
       document.querySelectorAll('.song-card').forEach(c => c.classList.remove('playing'));
-      if (state.currentSong) {
-        const activeCard = document.getElementById(`song-card-${state.currentSong.id}`);
-        if (activeCard) activeCard.classList.add('playing');
-      }
+      const active = document.getElementById(`song-card-${song.id}`);
+      if (active) active.classList.add('playing');
     }
 
     function togglePlay() {
       if (!state.currentSong) {
-        if (state.songs.length > 0) playSongAtIndex(0);
+        if (state.songs.length > 0) playSong(0);
         return;
       }
       if (audio.paused) {
@@ -933,94 +601,47 @@
       updatePlayerUI();
     }
 
-    function playPrev() {
-      if (state.songs.length === 0) return;
-      let nextIdx = state.currentIndex - 1;
-      if (nextIdx < 0) nextIdx = state.songs.length - 1;
-      playSongAtIndex(nextIdx);
+    function updatePlayerUI() {
+      const song = state.currentSong;
+      if (!song) return;
+      document.getElementById('playerCover').src = song.coverUrl;
+      document.getElementById('playerTitle').innerText = song.title;
+      document.getElementById('playerArtist').innerText = `${song.artist} · ${song.album}`;
+      document.getElementById('playIcon').style.display = state.isPlaying ? 'none' : 'block';
+      document.getElementById('pauseIcon').style.display = state.isPlaying ? 'block' : 'none';
     }
 
-    function playNext() {
-      if (state.songs.length === 0) return;
-      let nextIdx = state.currentIndex + 1;
-      if (nextIdx >= state.songs.length) nextIdx = 0;
-      playSongAtIndex(nextIdx);
-    }
-
-    function initAudioEvents() {
-      const progressBar = document.getElementById('progressBar');
-      const currentTimeEl = document.getElementById('currentTime');
-      const durationTimeEl = document.getElementById('durationTime');
-
-      audio.addEventListener('timeupdate', () => {
-        if (!isNaN(audio.duration) && audio.duration > 0) {
-          const progress = (audio.currentTime / audio.duration) * 100;
-          progressBar.value = progress;
-          currentTimeEl.innerText = formatTime(audio.currentTime);
-          durationTimeEl.innerText = formatTime(audio.duration);
-        }
-      });
-
-      audio.addEventListener('ended', () => playNext());
-
-      progressBar.addEventListener('input', (e) => {
-        if (!isNaN(audio.duration) && audio.duration > 0) {
-          const seekTime = (e.target.value / 100) * audio.duration;
-          audio.currentTime = seekTime;
-        }
-      });
-
-      document.getElementById('volumeBar').addEventListener('input', (e) => {
-        audio.volume = parseFloat(e.target.value);
+    function setupAudioEvents() {
+      audio.addEventListener('ended', () => {
+        let next = state.currentIndex + 1;
+        if (next < state.songs.length) playSong(next);
       });
     }
 
-    function toggleMute() {
-      audio.muted = !audio.muted;
-      showToast(audio.muted ? '已静音' : '已恢复声音');
-    }
-
-    function formatTime(seconds) {
-      if (isNaN(seconds) || seconds < 0) return '00:00';
-      const m = Math.floor(seconds / 60);
-      const s = Math.floor(seconds % 60);
-      return `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
-    }
-
-    function toggleFavorite(e, index) {
+    function toggleFav(e, index) {
       e.stopPropagation();
       const song = state.songs[index];
-      const existIdx = state.favorites.findIndex(f => f.id === song.id);
-
-      if (existIdx >= 0) {
-        state.favorites.splice(existIdx, 1);
+      const idx = state.favorites.findIndex(f => f.id === song.id);
+      if (idx >= 0) {
+        state.favorites.splice(idx, 1);
         showToast('已取消收藏');
       } else {
         state.favorites.unshift(song);
-        showToast('已加入我的收藏');
+        showToast('已加入收藏');
       }
-
-      localStorage.setItem('cloudmusic_favs', JSON.stringify(state.favorites));
-      updateFavBadge();
-
-      if (state.currentSource === 'fav') renderFavorites();
-      else e.currentTarget.classList.toggle('active', existIdx < 0);
-    }
-
-    function updateFavBadge() {
+      localStorage.setItem('my_fav_songs_v3', JSON.stringify(state.favorites));
       favCountEl.innerText = state.favorites.length;
+      if (state.tab === 'fav') renderFavorites();
+      else e.currentTarget.classList.toggle('active', idx < 0);
     }
 
     function renderFavorites() {
       listTitle.innerText = '我的收藏夹';
-      listBadge.innerText = `共 ${state.favorites.length} 首歌曲`;
+      listBadge.innerText = `共 ${state.favorites.length} 首`;
       state.songs = state.favorites;
-
       if (state.favorites.length === 0) {
-        showStatus(true, '收藏夹空空如也，快去搜索喜欢的音乐吧~', false, false);
-        songListEl.innerHTML = '';
+        songListEl.innerHTML = '<div style="text-align:center;padding:40px;color:var(--text-sub);">收藏夹是空的，快去添加吧~</div>';
       } else {
-        showStatus(false);
         renderSongList(state.favorites);
       }
     }
@@ -1028,72 +649,32 @@
     function downloadSong(e, index) {
       if (e) e.stopPropagation();
       const song = state.songs[index];
-      if (!song || !song.downloadUrl) {
-        showToast('暂无下载链接');
-        return;
-      }
-
-      showToast(`正在打开下载: ${song.title}...`);
-      const safeFileName = `${song.artist} - ${song.title}.mp3`.replace(/[\/\\:*?"<>|]/g, '_');
+      if (!song || !song.streamUrl) return;
+      showToast(`正在打开下载: ${song.title}`);
       const a = document.createElement('a');
-      a.href = song.downloadUrl;
+      a.href = song.streamUrl;
       a.target = '_blank';
-      a.download = safeFileName;
+      a.download = `${song.artist} - ${song.title}.m4a`;
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
     }
 
     function downloadCurrentSong() {
-      if (state.currentIndex >= 0 && state.songs[state.currentIndex]) {
-        downloadSong(null, state.currentIndex);
-      } else {
-        showToast('当前没有正在播放的歌曲');
-      }
-    }
-
-    function setupMediaSession() {
-      if ('mediaSession' in navigator) {
-        navigator.mediaSession.setActionHandler('play', () => togglePlay());
-        navigator.mediaSession.setActionHandler('pause', () => togglePlay());
-        navigator.mediaSession.setActionHandler('previoustrack', () => playPrev());
-        navigator.mediaSession.setActionHandler('nexttrack', () => playNext());
-      }
-    }
-
-    function syncMediaSession(song) {
-      if ('mediaSession' in navigator && song) {
-        navigator.mediaSession.metadata = new MediaMetadata({
-          title: song.title,
-          artist: song.artist,
-          album: song.album,
-          artwork: [{ src: song.coverUrl, sizes: '512x512', type: 'image/jpeg' }]
-        });
-      }
-    }
-
-    function showStatus(show, text = '', withSpinner = true, withRetry = false) {
-      statusBox.style.display = show ? 'block' : 'none';
-      statusText.innerText = text;
-      spinner.style.display = withSpinner ? 'block' : 'none';
-      retryBtn.style.display = withRetry ? 'inline-block' : 'none';
+      if (state.currentIndex >= 0) downloadSong(null, state.currentIndex);
+      else showToast('当前未选择歌曲');
     }
 
     function showToast(msg) {
       const toast = document.getElementById('toast');
       toast.innerText = msg;
       toast.classList.add('show');
-      setTimeout(() => toast.classList.remove('show'), 2200);
+      setTimeout(() => toast.classList.remove('show'), 2000);
     }
 
     function escapeHtml(str) {
       if (!str) return '';
-      return String(str)
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;')
-        .replace(/'/g, '&#39;');
+      return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
     }
   </script>
 </body>
