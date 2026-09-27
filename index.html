@@ -6,7 +6,7 @@
   <meta name="theme-color" content="#121216">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <title>CloudMusic Web - 全网音乐搜索与播放器</title>
+  <title>CloudMusic Web - 全网音乐搜歌与下载</title>
   <style>
     :root {
       --bg-primary: #0f1015;
@@ -39,28 +39,14 @@
       display: flex;
       flex-direction: column;
       overflow-x: hidden;
-      padding-bottom: calc(var(--player-height) + 24px);
-    }
-
-    .wx-tip-bar {
-      display: none;
-      background: linear-gradient(90deg, #ff7e5f, #feb47b);
-      color: #1a1a1a;
-      font-size: 0.82rem;
-      font-weight: 600;
-      padding: 10px 16px;
-      text-align: center;
-      line-height: 1.4;
-      position: sticky;
-      top: 0;
-      z-index: 1000;
+      padding-bottom: calc(var(--player-height) + env(safe-area-inset-bottom, 20px) + 20px);
     }
 
     header {
       position: sticky;
       top: 0;
       z-index: 100;
-      background: rgba(15, 16, 21, 0.9);
+      background: rgba(15, 16, 21, 0.92);
       backdrop-filter: blur(16px);
       -webkit-backdrop-filter: blur(16px);
       border-bottom: 1px solid var(--border-color);
@@ -100,7 +86,7 @@
 
     .tab-pills {
       display: flex;
-      gap: 6px;
+      gap: 5px;
       background: var(--bg-secondary);
       padding: 3px;
       border-radius: 10px;
@@ -111,9 +97,9 @@
       background: transparent;
       border: none;
       color: var(--text-sub);
-      padding: 6px 12px;
+      padding: 6px 11px;
       border-radius: 7px;
-      font-size: 0.82rem;
+      font-size: 0.8rem;
       font-weight: 600;
       cursor: pointer;
       transition: var(--transition);
@@ -326,14 +312,19 @@
       color: var(--text-sub);
     }
 
-    .source-tag.jamendo {
-      background: rgba(30, 215, 96, 0.15);
-      color: #1ed760;
+    .source-tag.netease {
+      background: rgba(229, 38, 38, 0.15);
+      color: #e52626;
     }
 
-    .source-tag.itunes {
-      background: rgba(250, 45, 72, 0.15);
-      color: #fa2d48;
+    .source-tag.tencent {
+      background: rgba(30, 204, 114, 0.15);
+      color: #1ecc72;
+    }
+
+    .source-tag.kugou {
+      background: rgba(43, 133, 255, 0.15);
+      color: #2b85ff;
     }
 
     .song-actions {
@@ -407,15 +398,15 @@
       bottom: 0;
       left: 0;
       right: 0;
-      height: var(--player-height);
+      height: calc(var(--player-height) + env(safe-area-inset-bottom, 0px));
       background: rgba(24, 25, 32, 0.96);
       backdrop-filter: blur(20px);
       -webkit-backdrop-filter: blur(20px);
       border-top: 1px solid var(--border-color);
       z-index: 200;
       display: flex;
-      align-items: center;
-      padding: 0 16px;
+      align-items: flex-start;
+      padding: 12px 16px;
     }
 
     .player-inner {
@@ -541,7 +532,6 @@
     .vol-slider { width: 75px; }
 
     @media (max-width: 768px) {
-      body { padding-bottom: calc(var(--player-height) + 12px); }
       .player-inner { grid-template-columns: 1fr auto; gap: 8px; }
       .player-right { display: none; }
       .progress-row {
@@ -583,21 +573,18 @@
 </head>
 <body>
 
-  <div id="wxTipBar" class="wx-tip-bar">
-    ⚠️ 检测到在微信内打开：微信会拦截外部音频播放与下载。建议点击右上角【...】，选择【在浏览器打开】以获得完整体验！
-  </div>
-
   <header>
     <div class="header-inner">
       <div class="brand-row">
         <div class="brand">
           <span>🎧 CloudMusic</span>
-          <span class="brand-badge">Web Pro</span>
+          <span class="brand-badge">国内免翻专版</span>
         </div>
         <div class="tab-pills">
-          <button class="tab-btn active" id="tab-itunes" onclick="switchSource('itunes')">流行精选</button>
-          <button class="tab-btn" id="tab-jamendo" onclick="switchSource('jamendo')">免版税曲库</button>
-          <button class="tab-btn" id="tab-fav" onclick="switchSource('fav')">我的收藏 (<span id="fav-count">0</span>)</button>
+          <button class="tab-btn active" id="tab-netease" onclick="switchSource('netease')">网易云</button>
+          <button class="tab-btn" id="tab-tencent" onclick="switchSource('tencent')">QQ音乐</button>
+          <button class="tab-btn" id="tab-kugou" onclick="switchSource('kugou')">酷狗</button>
+          <button class="tab-btn" id="tab-fav" onclick="switchSource('fav')">收藏 (<span id="fav-count">0</span>)</button>
         </div>
       </div>
 
@@ -606,16 +593,16 @@
           <circle cx="11" cy="11" r="8"></circle>
           <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
         </svg>
-        <input type="text" id="searchInput" class="search-input" placeholder="输入歌名、歌手或风格（如：周杰伦、轻音乐、摇滚）..." autocomplete="off">
+        <input type="text" id="searchInput" class="search-input" placeholder="输入歌名或歌手（如：晴天、周杰伦、陈奕迅）..." autocomplete="off">
         <button class="search-btn" onclick="triggerSearch()">搜索</button>
       </div>
 
       <div class="quick-tags">
         <div class="quick-tag" onclick="quickFill('周杰伦')">周杰伦</div>
+        <div class="quick-tag" onclick="quickFill('晴天')">晴天</div>
+        <div class="quick-tag" onclick="quickFill('七里香')">七里香</div>
         <div class="quick-tag" onclick="quickFill('陈奕迅')">陈奕迅</div>
-        <div class="quick-tag" onclick="quickFill('Taylor Swift')">Taylor Swift</div>
-        <div class="quick-tag" onclick="quickFill('轻音乐 治愈')">轻音乐 治愈</div>
-        <div class="quick-tag" onclick="quickFill('电子 律动 BGM')">电子 律动 BGM</div>
+        <div class="quick-tag" onclick="quickFill('林俊杰')">林俊杰</div>
       </div>
     </div>
   </header>
@@ -628,7 +615,7 @@
     <div class="song-grid" id="songList"></div>
     <div id="statusBox" class="state-container" style="display: none;">
       <div class="spinner" id="spinner"></div>
-      <div id="statusText">正在检索曲库中...</div>
+      <div id="statusText">正在全网国内高速检索中...</div>
       <button id="retryBtn" class="retry-btn" onclick="retryLastSearch()">重新加载</button>
     </div>
   </main>
@@ -679,15 +666,22 @@
   <div id="toast" class="toast">提示信息</div>
 
   <script>
+    // 国内直连无阻断的高速解析节点集群
+    const DOMESTIC_NODES = [
+      'https://api.injahow.cn/meting/',
+      'https://meting.000024.xyz/api',
+      'https://api.i-meting.com/meting/'
+    ];
+
     const state = {
-      currentSource: 'itunes',
+      currentSource: 'netease', // 'netease' | 'tencent' | 'kugou' | 'fav'
       songs: [],
       currentIndex: -1,
       currentSong: null,
       isPlaying: false,
       lastQuery: '周杰伦',
-      favorites: JSON.parse(localStorage.getItem('cloudmusic_favs') || '[]'),
-      jamendoClientId: 'c8065a8e'
+      activeNode: DOMESTIC_NODES[0],
+      favorites: JSON.parse(localStorage.getItem('cloudmusic_favs') || '[]')
     };
 
     const audio = document.getElementById('audioCore');
@@ -700,96 +694,43 @@
     const listBadge = document.getElementById('listBadge');
     const favCountEl = document.getElementById('fav-count');
 
-    // 智能多通道容灾请求器（彻底解决手机 5G / Safari 跨域及网络连接问题）
-    async function fetchWithFallback(targetUrl) {
-      const attempts = [
-        // 通道 1: 直连探测（3.5 秒快速超时，避免在手机慢网死等）
-        async () => {
-          const c = new AbortController();
-          const t = setTimeout(() => c.abort(), 3500);
-          const res = await fetch(targetUrl, { signal: c.signal });
-          clearTimeout(t);
-          if (!res.ok) throw new Error('Direct failed');
-          return await res.json();
-        },
-        // 通道 2: AllOrigins 云端中继通道（自动添加跨域头，免翻墙稳定连接）
-        async () => {
-          const c = new AbortController();
-          const t = setTimeout(() => c.abort(), 6000);
-          const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(targetUrl)}`;
-          const res = await fetch(proxyUrl, { signal: c.signal });
-          clearTimeout(t);
-          if (!res.ok) throw new Error('Allorigins failed');
-          const data = await res.json();
-          return JSON.parse(data.contents);
-        },
-        // 通道 3: CorsProxy 边缘高速节点
-        async () => {
-          const c = new AbortController();
-          const t = setTimeout(() => c.abort(), 6000);
-          const proxyUrl = `https://corsproxy.io/?url=${encodeURIComponent(targetUrl)}`;
-          const res = await fetch(proxyUrl, { signal: c.signal });
-          clearTimeout(t);
-          if (!res.ok) throw new Error('Corsproxy failed');
-          return await res.json();
-        }
-      ];
-
-      let lastErr = null;
-      for (let i = 0; i < attempts.length; i++) {
-        try {
-          const data = await attempts[i]();
-          if (data && (data.results || Array.isArray(data))) {
-            return data;
-          }
-        } catch (err) {
-          lastErr = err;
-        }
-      }
-      throw lastErr || new Error('网络请求异常');
-    }
-
     window.addEventListener('DOMContentLoaded', () => {
-      const ua = navigator.userAgent.toLowerCase();
-      if (ua.includes('micromessenger')) {
-        document.getElementById('wxTipBar').style.display = 'block';
-      }
-
       updateFavBadge();
       initAudioEvents();
       setupMediaSession();
-      performSearch(state.lastQuery, 'itunes');
+      performSearch(state.lastQuery, 'netease');
     });
 
     function switchSource(source) {
       state.currentSource = source;
       document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-      document.getElementById(`tab-${source}`).classList.add('active');
+      const activeBtn = document.getElementById(`tab-${source}`);
+      if (activeBtn) activeBtn.classList.add('active');
 
       if (source === 'fav') {
         renderFavorites();
       } else {
-        const query = document.getElementById('searchInput').value.trim() || state.lastQuery || '热门';
+        const query = document.getElementById('searchInput').value.trim() || state.lastQuery || '周杰伦';
         performSearch(query, source);
       }
     }
 
     function quickFill(tag) {
       document.getElementById('searchInput').value = tag;
-      if (state.currentSource === 'fav') switchSource('itunes');
+      if (state.currentSource === 'fav') switchSource('netease');
       else performSearch(tag, state.currentSource);
     }
 
     function triggerSearch() {
       const keyword = document.getElementById('searchInput').value.trim();
       if (!keyword) {
-        showToast('请输入搜索关键词');
+        showToast('请输入歌名或歌手');
         return;
       }
       if (state.currentSource === 'fav') {
-        state.currentSource = 'itunes';
+        state.currentSource = 'netease';
         document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-        document.getElementById('tab-itunes').classList.add('active');
+        document.getElementById('tab-netease').classList.add('active');
       }
       performSearch(keyword, state.currentSource);
     }
@@ -798,22 +739,79 @@
       if (e.key === 'Enter') triggerSearch();
     });
 
-    async function performSearch(query, source) {
+    // 多节点国内无缝轮询请求
+    async function fetchFromDomesticNodes(query, platform) {
+      let lastError = null;
+
+      for (let i = 0; i < DOMESTIC_NODES.length; i++) {
+        const baseUrl = DOMESTIC_NODES[i];
+        const requestUrl = `${baseUrl}?server=${platform}&type=search&id=${encodeURIComponent(query)}`;
+
+        try {
+          const controller = new AbortController();
+          const timer = setTimeout(() => controller.abort(), 6000); // 6秒超时
+
+          const res = await fetch(requestUrl, {
+            signal: controller.signal,
+            headers: { 'Accept': 'application/json' }
+          });
+          clearTimeout(timer);
+
+          if (res.ok) {
+            const list = await res.json();
+            if (Array.isArray(list) && list.length > 0) {
+              state.activeNode = baseUrl;
+              return list.map(item => {
+                const artist = Array.isArray(item.artist) ? item.artist.join(' / ') : (item.artist || '未知歌手');
+                const songId = item.id || item.url_id;
+                const streamUrl = item.url && item.url.startsWith('http') 
+                  ? item.url 
+                  : `${baseUrl}?server=${platform}&type=url&id=${songId}`;
+                const coverUrl = item.pic && item.pic.startsWith('http')
+                  ? item.pic
+                  : `${baseUrl}?server=${platform}&type=pic&id=${item.pic_id || songId}`;
+
+                let platformName = '网易云';
+                if (platform === 'tencent') platformName = 'QQ音乐';
+                else if (platform === 'kugou') platformName = '酷狗';
+
+                return {
+                  id: `${platform}_${songId}`,
+                  title: item.name || item.title || '未知曲目',
+                  artist: artist,
+                  album: item.album || '单曲',
+                  coverUrl: coverUrl,
+                  duration: item.duration || 240,
+                  streamUrl: streamUrl,
+                  downloadUrl: streamUrl,
+                  source: platform,
+                  sourceName: platformName
+                };
+              });
+            }
+          }
+        } catch (err) {
+          lastError = err;
+          console.warn(`节点 ${baseUrl} 访问失败，切换下一节点...`);
+        }
+      }
+      throw lastError || new Error('所有国内解析节点均无响应');
+    }
+
+    async function performSearch(query, platform) {
       state.lastQuery = query;
-      showStatus(true, '正在通过加速通道检索曲库...', true, false);
+      showStatus(true, '正在连接国内曲库检索中...', true, false);
       songListEl.innerHTML = '';
 
       try {
-        let results = [];
-        if (source === 'itunes') {
-          results = await fetchFromITunes(query);
-          listTitle.innerText = `搜索结果: "${query}" (流行曲库)`;
-        } else if (source === 'jamendo') {
-          results = await fetchFromJamendo(query);
-          listTitle.innerText = `搜索结果: "${query}" (免版税完整曲库)`;
-        }
-
+        const results = await fetchFromDomesticNodes(query, platform);
         state.songs = results;
+
+        let platText = '网易云曲库';
+        if (platform === 'tencent') platText = 'QQ音乐曲库';
+        else if (platform === 'kugou') platText = '酷狗曲库';
+
+        listTitle.innerText = `搜索: "${query}" (${platText})`;
         listBadge.innerText = `共 ${results.length} 首歌曲`;
 
         if (results.length === 0) {
@@ -824,48 +822,12 @@
         }
       } catch (err) {
         console.error('Search error:', err);
-        showStatus(true, '当前手机网络连接不稳定或接口受限，请点击下方重试或切换 Wi-Fi', false, true);
+        showStatus(true, '当前网络请求波动，请点击下方按钮重试', false, true);
       }
     }
 
     function retryLastSearch() {
       performSearch(state.lastQuery, state.currentSource);
-    }
-
-    async function fetchFromITunes(query) {
-      const url = `https://itunes.apple.com/search?term=${encodeURIComponent(query)}&country=cn&media=music&entity=song&limit=30`;
-      const data = await fetchWithFallback(url);
-
-      return (data.results || []).map(item => ({
-        id: `itunes_${item.trackId}`,
-        title: item.trackName,
-        artist: item.artistName,
-        album: item.collectionName || '单曲',
-        coverUrl: (item.artworkUrl100 || '').replace('100x100bb', '600x600bb'),
-        duration: Math.round(item.trackTimeMillis / 1000),
-        streamUrl: item.previewUrl,
-        downloadUrl: item.previewUrl,
-        source: 'iTunes',
-        sourceName: '流行精选'
-      }));
-    }
-
-    async function fetchFromJamendo(query) {
-      const url = `https://api.jamendo.com/v3.0/tracks/?client_id=${state.jamendoClientId}&format=json&limit=30&namesearch=${encodeURIComponent(query)}&audioformat=mp32`;
-      const data = await fetchWithFallback(url);
-
-      return (data.results || []).map(item => ({
-        id: `jam_${item.id}`,
-        title: item.name,
-        artist: item.artist_name,
-        album: item.album_name || '免版权正版',
-        coverUrl: item.album_image || item.image || '',
-        duration: item.duration,
-        streamUrl: item.audio,
-        downloadUrl: item.audiodownload || item.audio,
-        source: 'Jamendo',
-        sourceName: '完整曲目'
-      }));
     }
 
     function renderSongList(songs) {
@@ -884,7 +846,7 @@
 
         card.innerHTML = `
           <div class="cover-wrap" onclick="playSongAtIndex(${index})">
-            <img class="cover-img" src="${song.coverUrl || ''}" alt="${song.title}" loading="lazy">
+            <img class="cover-img" src="${song.coverUrl}" alt="${song.title}" loading="lazy" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'50\' height=\'50\' viewBox=\'0 0 50 50\'%3E%3Crect width=\'50\' height=\'50\' fill=\'%23252630\'/%3E%3C/svg%3E'">
             <div class="cover-play-badge">
               <svg class="play-icon" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
             </div>
@@ -894,8 +856,8 @@
             <div class="song-artist">
               <span>${escapeHtml(song.artist)}</span>
               <span>·</span>
-              <span>${minutes}:${seconds}</span>
-              <span class="source-tag ${song.source.toLowerCase()}">${song.sourceName}</span>
+              <span>${escapeHtml(song.album)}</span>
+              <span class="source-tag ${song.source}">${song.sourceName}</span>
             </div>
           </div>
           <div class="song-actions">
@@ -925,8 +887,9 @@
       audio.play().then(() => {
         state.isPlaying = true;
         updatePlayerUI();
-      }).catch(() => {
-        showToast('播放提示：移动端请轻触屏幕播放');
+      }).catch(e => {
+        console.warn('Playback gesture required:', e);
+        showToast('播放提示：iPhone 需轻触屏幕开启播放');
       });
 
       updateCardActiveState();
@@ -937,7 +900,7 @@
       const song = state.currentSong;
       if (!song) return;
 
-      document.getElementById('playerCover').src = song.coverUrl || '';
+      document.getElementById('playerCover').src = song.coverUrl;
       document.getElementById('playerTitle').innerText = song.title;
       document.getElementById('playerArtist').innerText = `${song.artist} · ${song.album}`;
 
@@ -1062,40 +1025,23 @@
       }
     }
 
-    async function downloadSong(e, index) {
+    function downloadSong(e, index) {
       if (e) e.stopPropagation();
       const song = state.songs[index];
       if (!song || !song.downloadUrl) {
-        showToast('暂无下载源');
+        showToast('暂无下载链接');
         return;
       }
 
-      showToast(`准备下载: ${song.title}...`);
+      showToast(`正在打开下载: ${song.title}...`);
       const safeFileName = `${song.artist} - ${song.title}.mp3`.replace(/[\/\\:*?"<>|]/g, '_');
-
-      try {
-        const response = await fetch(song.downloadUrl, { mode: 'cors' });
-        if (!response.ok) throw new Error('CORS blocked');
-        const blob = await response.blob();
-        const blobUrl = URL.createObjectURL(blob);
-        const link = document.createElement('a');
-        link.href = blobUrl;
-        link.download = safeFileName;
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-        setTimeout(() => URL.revokeObjectURL(blobUrl), 1000);
-        showToast('下载已开始！');
-      } catch (err) {
-        const directLink = document.createElement('a');
-        directLink.href = song.downloadUrl;
-        directLink.target = '_blank';
-        directLink.download = safeFileName;
-        document.body.appendChild(directLink);
-        directLink.click();
-        document.body.removeChild(directLink);
-        showToast('已在新窗口触发下载');
-      }
+      const a = document.createElement('a');
+      a.href = song.downloadUrl;
+      a.target = '_blank';
+      a.download = safeFileName;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
     }
 
     function downloadCurrentSong() {
@@ -1121,7 +1067,7 @@
           title: song.title,
           artist: song.artist,
           album: song.album,
-          artwork: [{ src: song.coverUrl || '', sizes: '512x512', type: 'image/jpeg' }]
+          artwork: [{ src: song.coverUrl, sizes: '512x512', type: 'image/jpeg' }]
         });
       }
     }
