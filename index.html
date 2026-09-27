@@ -42,7 +42,6 @@
       padding-bottom: calc(var(--player-height) + 24px);
     }
 
-    /* 微信内打开温馨提示条 */
     .wx-tip-bar {
       display: none;
       background: linear-gradient(90deg, #ff7e5f, #feb47b);
@@ -55,14 +54,13 @@
       position: sticky;
       top: 0;
       z-index: 1000;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.2);
     }
 
     header {
       position: sticky;
       top: 0;
       z-index: 100;
-      background: rgba(15, 16, 21, 0.88);
+      background: rgba(15, 16, 21, 0.9);
       backdrop-filter: blur(16px);
       -webkit-backdrop-filter: blur(16px);
       border-bottom: 1px solid var(--border-color);
@@ -374,7 +372,7 @@
 
     .state-container {
       text-align: center;
-      padding: 50px 20px;
+      padding: 40px 20px;
       color: var(--text-sub);
     }
 
@@ -390,6 +388,18 @@
 
     @keyframes spin {
       to { transform: rotate(360deg); }
+    }
+
+    .retry-btn {
+      display: none;
+      margin-top: 14px;
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      padding: 8px 18px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      cursor: pointer;
     }
 
     .player-bar {
@@ -574,7 +584,7 @@
 <body>
 
   <div id="wxTipBar" class="wx-tip-bar">
-    ⚠️ 检测到在微信内打开：微信会拦截部分外部音频播放与下载。建议点击右上角【...】，选择【在浏览器打开】以获得完整体验！
+    ⚠️ 检测到在微信内打开：微信会拦截外部音频播放与下载。建议点击右上角【...】，选择【在浏览器打开】以获得完整体验！
   </div>
 
   <header>
@@ -619,6 +629,7 @@
     <div id="statusBox" class="state-container" style="display: none;">
       <div class="spinner" id="spinner"></div>
       <div id="statusText">正在检索曲库中...</div>
+      <button id="retryBtn" class="retry-btn" onclick="retryLastSearch()">重新加载</button>
     </div>
   </main>
 
@@ -674,6 +685,7 @@
       currentIndex: -1,
       currentSong: null,
       isPlaying: false,
+      lastQuery: '周杰伦',
       favorites: JSON.parse(localStorage.getItem('cloudmusic_favs') || '[]'),
       jamendoClientId: 'c8065a8e'
     };
@@ -683,45 +695,61 @@
     const statusBox = document.getElementById('statusBox');
     const statusText = document.getElementById('statusText');
     const spinner = document.getElementById('spinner');
+    const retryBtn = document.getElementById('retryBtn');
     const listTitle = document.getElementById('listTitle');
     const listBadge = document.getElementById('listBadge');
     const favCountEl = document.getElementById('fav-count');
 
-    // 通用 JSONP 请求工具（彻底解决移动端与跨域限制）
-    function fetchJSONP(url, timeoutMs = 8000) {
-      return new Promise((resolve, reject) => {
-        const callbackName = 'jsonp_cb_' + Math.round(100000 * Math.random());
-        const script = document.createElement('script');
-        const sep = url.includes('?') ? '&' : '?';
-        script.src = `${url}${sep}callback=${callbackName}`;
-
-        const timer = setTimeout(() => {
-          cleanup();
-          reject(new Error('请求超时'));
-        }, timeoutMs);
-
-        function cleanup() {
-          if (script.parentNode) script.parentNode.removeChild(script);
-          delete window[callbackName];
-          clearTimeout(timer);
+    // 智能多通道容灾请求器（彻底解决手机 5G / Safari 跨域及网络连接问题）
+    async function fetchWithFallback(targetUrl) {
+      const attempts = [
+        // 通道 1: 直连探测（3.5 秒快速超时，避免在手机慢网死等）
+        async () => {
+          const c = new AbortController();
+          const t = setTimeout(() => c.abort(), 3500);
+          const res = await fetch(targetUrl, { signal: c.signal });
+          clearTimeout(t);
+          if (!res.ok) throw new Error('Direct failed');
+          return await res.json();
+        },
+        // 通道 2: AllOrigins 云端中继通道（自动添加跨域头，免翻墙稳定连接）
+        async () => {
+          const c = new AbortController();
+          const t = setTimeout(() => c.abort(), 6000);
+          const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(targetUrl)}`;
+          const res = await fetch(proxyUrl, { signal: c.signal });
+          clearTimeout(t);
+          if (!res.ok) throw new Error('Allorigins failed');
+          const data = await res.json();
+          return JSON.parse(data.contents);
+        },
+        // 通道 3: CorsProxy 边缘高速节点
+        async () => {
+          const c = new AbortController();
+          const t = setTimeout(() => c.abort(), 6000);
+          const proxyUrl = `https://corsproxy.io/?url=${encodeURIComponent(targetUrl)}`;
+          const res = await fetch(proxyUrl, { signal: c.signal });
+          clearTimeout(t);
+          if (!res.ok) throw new Error('Corsproxy failed');
+          return await res.json();
         }
+      ];
 
-        window[callbackName] = function(data) {
-          cleanup();
-          resolve(data);
-        };
-
-        script.onerror = function() {
-          cleanup();
-          reject(new Error('网络请求被拦截或失败'));
-        };
-
-        document.body.appendChild(script);
-      });
+      let lastErr = null;
+      for (let i = 0; i < attempts.length; i++) {
+        try {
+          const data = await attempts[i]();
+          if (data && (data.results || Array.isArray(data))) {
+            return data;
+          }
+        } catch (err) {
+          lastErr = err;
+        }
+      }
+      throw lastErr || new Error('网络请求异常');
     }
 
     window.addEventListener('DOMContentLoaded', () => {
-      // 检查是否在微信内打开
       const ua = navigator.userAgent.toLowerCase();
       if (ua.includes('micromessenger')) {
         document.getElementById('wxTipBar').style.display = 'block';
@@ -730,7 +758,7 @@
       updateFavBadge();
       initAudioEvents();
       setupMediaSession();
-      performSearch('周杰伦', 'itunes');
+      performSearch(state.lastQuery, 'itunes');
     });
 
     function switchSource(source) {
@@ -741,7 +769,7 @@
       if (source === 'fav') {
         renderFavorites();
       } else {
-        const query = document.getElementById('searchInput').value.trim() || '热门';
+        const query = document.getElementById('searchInput').value.trim() || state.lastQuery || '热门';
         performSearch(query, source);
       }
     }
@@ -771,7 +799,8 @@
     });
 
     async function performSearch(query, source) {
-      showStatus(true, '正在全网检索曲库中...', true);
+      state.lastQuery = query;
+      showStatus(true, '正在通过加速通道检索曲库...', true, false);
       songListEl.innerHTML = '';
 
       try {
@@ -788,27 +817,24 @@
         listBadge.innerText = `共 ${results.length} 首歌曲`;
 
         if (results.length === 0) {
-          showStatus(true, '未找到相关歌曲，换个词试试吧~', false);
+          showStatus(true, '未找到相关歌曲，换个词试试吧~', false, false);
         } else {
           showStatus(false);
           renderSongList(results);
         }
       } catch (err) {
         console.error('Search error:', err);
-        showStatus(true, '网络请求异常，若在微信中打开请点击右上角选择【在浏览器打开】', false);
+        showStatus(true, '当前手机网络连接不稳定或接口受限，请点击下方重试或切换 Wi-Fi', false, true);
       }
     }
 
-    // 采用 JSONP 模式，彻底绕过手机端浏览器的跨域拦截
+    function retryLastSearch() {
+      performSearch(state.lastQuery, state.currentSource);
+    }
+
     async function fetchFromITunes(query) {
-      const url = `https://itunes.apple.com/search?term=${encodeURIComponent(query)}&media=music&entity=song&limit=30`;
-      let data;
-      try {
-        data = await fetchJSONP(url);
-      } catch (e) {
-        const res = await fetch(url);
-        data = await res.json();
-      }
+      const url = `https://itunes.apple.com/search?term=${encodeURIComponent(query)}&country=cn&media=music&entity=song&limit=30`;
+      const data = await fetchWithFallback(url);
 
       return (data.results || []).map(item => ({
         id: `itunes_${item.trackId}`,
@@ -826,13 +852,7 @@
 
     async function fetchFromJamendo(query) {
       const url = `https://api.jamendo.com/v3.0/tracks/?client_id=${state.jamendoClientId}&format=json&limit=30&namesearch=${encodeURIComponent(query)}&audioformat=mp32`;
-      let data;
-      try {
-        data = await fetchJSONP(url);
-      } catch (e) {
-        const res = await fetch(url);
-        data = await res.json();
-      }
+      const data = await fetchWithFallback(url);
 
       return (data.results || []).map(item => ({
         id: `jam_${item.id}`,
@@ -858,8 +878,9 @@
         card.className = `song-card ${isPlayingThis ? 'playing' : ''}`;
         card.id = `song-card-${song.id}`;
 
-        const minutes = Math.floor(song.duration / 60);
-        const seconds = String(song.duration % 60).padStart(2, '0');
+        const dur = parseInt(song.duration) || 0;
+        const minutes = Math.floor(dur / 60);
+        const seconds = String(dur % 60).padStart(2, '0');
 
         card.innerHTML = `
           <div class="cover-wrap" onclick="playSongAtIndex(${index})">
@@ -905,7 +926,7 @@
         state.isPlaying = true;
         updatePlayerUI();
       }).catch(() => {
-        showToast('播放提示：移动端需先轻触屏幕方可播放音频');
+        showToast('播放提示：移动端请轻触屏幕播放');
       });
 
       updateCardActiveState();
@@ -981,7 +1002,8 @@
 
       progressBar.addEventListener('input', (e) => {
         if (!isNaN(audio.duration) && audio.duration > 0) {
-          audio.currentTime = (e.target.value / 100) * audio.duration;
+          const seekTime = (e.target.value / 100) * audio.duration;
+          audio.currentTime = seekTime;
         }
       });
 
@@ -1032,7 +1054,7 @@
       state.songs = state.favorites;
 
       if (state.favorites.length === 0) {
-        showStatus(true, '收藏夹空空如也，快去搜索喜欢的音乐吧~', false);
+        showStatus(true, '收藏夹空空如也，快去搜索喜欢的音乐吧~', false, false);
         songListEl.innerHTML = '';
       } else {
         showStatus(false);
@@ -1104,10 +1126,11 @@
       }
     }
 
-    function showStatus(show, text = '', withSpinner = true) {
+    function showStatus(show, text = '', withSpinner = true, withRetry = false) {
       statusBox.style.display = show ? 'block' : 'none';
       statusText.innerText = text;
       spinner.style.display = withSpinner ? 'block' : 'none';
+      retryBtn.style.display = withRetry ? 'inline-block' : 'none';
     }
 
     function showToast(msg) {
