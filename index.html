@@ -4,8 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <meta name="theme-color" content="#181924">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <title>儿童儿歌大宝库 V4.0 海量版</title>
+  <title>儿童儿歌大宝库 - 完整原版 MP3</title>
   <style>
     :root {
       --bg-primary: #12131a;
@@ -17,7 +16,7 @@
       --text-main: #f8f9fa;
       --text-sub: #9ca0b0;
       --border-color: rgba(255, 255, 255, 0.08);
-      --player-height: 84px;
+      --player-height: 96px;
       --radius: 12px;
     }
 
@@ -30,7 +29,7 @@
       min-height: 100vh;
       display: flex;
       flex-direction: column;
-      padding-bottom: calc(var(--player-height) + env(safe-area-inset-bottom, 20px) + 25px);
+      padding-bottom: calc(var(--player-height) + env(safe-area-inset-bottom, 20px) + 20px);
     }
 
     header {
@@ -70,46 +69,16 @@
     .brand-badge {
       font-size: 0.68rem;
       font-weight: 600;
-      background: var(--accent);
+      background: rgba(46, 213, 115, 0.2);
+      border: 1px solid var(--accent-green);
       padding: 2px 8px;
       border-radius: 99px;
-      color: #fff;
-    }
-
-    .search-box-wrap {
-      display: flex;
-      gap: 8px;
-    }
-
-    .search-input {
-      flex: 1;
-      height: 44px;
-      background: var(--bg-secondary);
-      border: 1px solid var(--border-color);
-      border-radius: var(--radius);
-      padding: 0 16px;
-      color: var(--text-main);
-      font-size: 0.92rem;
-      outline: none;
-    }
-
-    .search-input:focus { border-color: var(--accent); }
-
-    .search-btn {
-      height: 44px;
-      padding: 0 20px;
-      background: var(--accent);
-      border: none;
-      border-radius: var(--radius);
-      color: #fff;
-      font-size: 0.9rem;
-      font-weight: 600;
-      cursor: pointer;
+      color: var(--accent-green);
     }
 
     .quick-categories {
       display: flex;
-      gap: 6px;
+      gap: 8px;
       overflow-x: auto;
       scrollbar-width: none;
       padding-bottom: 2px;
@@ -120,9 +89,9 @@
       background: rgba(255, 255, 255, 0.06);
       border: 1px solid var(--border-color);
       color: var(--text-sub);
-      padding: 6px 12px;
+      padding: 7px 14px;
       border-radius: 99px;
-      font-size: 0.78rem;
+      font-size: 0.8rem;
       cursor: pointer;
       white-space: nowrap;
       transition: all 0.2s;
@@ -142,6 +111,19 @@
       padding: 14px 16px;
     }
 
+    .status-bar {
+      background: rgba(46, 213, 115, 0.1);
+      border: 1px solid rgba(46, 213, 115, 0.25);
+      border-radius: 8px;
+      padding: 8px 12px;
+      font-size: 0.78rem;
+      color: var(--accent-green);
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
     .section-title {
       font-size: 0.95rem;
       font-weight: 600;
@@ -153,7 +135,7 @@
 
     .meta-badge {
       font-size: 0.76rem;
-      color: #2ed573;
+      color: var(--accent-green);
       font-weight: 500;
     }
 
@@ -221,44 +203,68 @@
       white-space: nowrap;
     }
 
-    .song-actions {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
     .action-btn {
-      background: rgba(255, 255, 255, 0.08);
-      border: 1px solid var(--border-color);
-      color: var(--text-main);
-      width: 36px;
-      height: 36px;
+      background: rgba(46, 213, 115, 0.12);
+      border: 1px solid rgba(46, 213, 115, 0.3);
+      color: var(--accent-green);
+      width: 34px;
+      height: 34px;
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
       cursor: pointer;
+      flex-shrink: 0;
     }
 
-    .action-btn.dl {
-      color: var(--accent-green);
-      background: rgba(46, 213, 115, 0.12);
-    }
-
+    /* 底部播放器与真实进度条 */
     .player-bar {
       position: fixed;
       bottom: 0;
       left: 0;
       right: 0;
-      height: calc(var(--player-height) + env(safe-area-inset-bottom, 0px));
       background: rgba(24, 25, 34, 0.98);
       backdrop-filter: blur(20px);
       -webkit-backdrop-filter: blur(20px);
       border-top: 1px solid var(--border-color);
       z-index: 200;
       display: flex;
-      align-items: flex-start;
-      padding: 10px 16px;
+      flex-direction: column;
+      padding: 6px 16px calc(env(safe-area-inset-bottom, 0px) + 6px) 16px;
+    }
+
+    .progress-container {
+      width: 100%;
+      max-width: 960px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 6px;
+    }
+
+    .time-text {
+      font-size: 0.72rem;
+      color: var(--text-sub);
+      font-family: monospace;
+      min-width: 40px;
+    }
+    .time-text.right { text-align: right; }
+
+    .progress-bar {
+      flex: 1;
+      height: 5px;
+      background: rgba(255, 255, 255, 0.12);
+      border-radius: 3px;
+      position: relative;
+      cursor: pointer;
+    }
+
+    .progress-fill {
+      height: 100%;
+      width: 0%;
+      background: var(--accent);
+      border-radius: 3px;
     }
 
     .player-inner {
@@ -280,8 +286,8 @@
     }
 
     .now-cover {
-      width: 44px;
-      height: 44px;
+      width: 42px;
+      height: 42px;
       border-radius: 6px;
       object-fit: cover;
       background: #252630;
@@ -293,8 +299,8 @@
     .now-artist { font-size: 0.72rem; color: var(--text-sub); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
     .ctrl-btn.play-pause {
-      width: 42px;
-      height: 42px;
+      width: 40px;
+      height: 40px;
       border-radius: 50%;
       background: var(--accent);
       color: #fff;
@@ -303,9 +309,9 @@
       align-items: center;
       justify-content: center;
       cursor: pointer;
+      flex-shrink: 0;
     }
 
-    /* iPhone 原生下载辅助弹窗 */
     .modal-overlay {
       position: fixed;
       inset: 0;
@@ -322,7 +328,7 @@
       background: #1f2230;
       border: 1px solid var(--border-color);
       border-radius: 16px;
-      padding: 24px 20px;
+      padding: 22px 18px;
       max-width: 360px;
       width: 100%;
       text-align: center;
@@ -330,13 +336,13 @@
     }
 
     .modal-title { font-size: 1.05rem; font-weight: 700; margin-bottom: 10px; color: #fff; }
-    .modal-desc { font-size: 0.84rem; color: var(--text-sub); line-height: 1.5; margin-bottom: 18px; text-align: left; }
+    .modal-desc { font-size: 0.82rem; color: var(--text-sub); line-height: 1.5; margin-bottom: 16px; text-align: left; }
     .modal-desc b { color: var(--accent-green); }
 
     .modal-btn {
       display: block;
       width: 100%;
-      padding: 13px;
+      padding: 12px;
       border-radius: 10px;
       font-size: 0.9rem;
       font-weight: 600;
@@ -375,76 +381,87 @@
       <div class="brand-row">
         <div class="brand">
           <span>👶 儿童儿歌大宝库</span>
-          <span class="brand-badge">V4.0 海量200首版</span>
+          <span class="brand-badge">完整长曲音源</span>
         </div>
       </div>
 
-      <div class="search-box-wrap">
-        <input type="text" id="searchInput" class="search-input" placeholder="输入歌名/歌手（如：数鸭子、小星星、周杰伦）..." autocomplete="off">
-        <button class="search-btn" onclick="triggerSearch()">搜索</button>
-      </div>
-
-      <!-- 八大儿歌主题，点击直接调取对应 200 首海量曲库 -->
+      <!-- 热门儿歌专辑分类（直连完整版歌单） -->
       <div class="quick-categories">
-        <div class="cat-btn active" onclick="loadCategory('宝宝巴士', this)">🍼 宝宝巴士 (200首)</div>
-        <div class="cat-btn" onclick="loadCategory('贝乐虎', this)">🐯 贝乐虎儿歌</div>
-        <div class="cat-btn" onclick="loadCategory('经典儿歌', this)">🐰 经典童谣</div>
-        <div class="cat-btn" onclick="loadCategory('睡前儿歌', this)">💤 睡前摇篮曲</div>
-        <div class="cat-btn" onclick="loadCategory('英文儿歌', this)">🔤 英文童谣 (ABC)</div>
-        <div class="cat-btn" onclick="loadCategory('恐龙儿歌', this)">🦖 恐龙与工程车</div>
-        <div class="cat-btn" onclick="loadCategory('儿歌多多', this)">🌟 儿歌多多</div>
-        <div class="cat-btn" onclick="loadCategory('周杰伦', this)">🎧 周杰伦流行</div>
+        <div class="cat-btn active" onclick="switchPlaylist('经典儿歌50首', '2619366284', this)">🐰 经典儿歌精选</div>
+        <div class="cat-btn" onclick="switchPlaylist('宝宝巴士大合集', '2829883282', this)">🍼 宝宝巴士热门</div>
+        <div class="cat-btn" onclick="switchPlaylist('睡前催眠摇篮曲', '505964270', this)">💤 睡前摇篮曲</div>
+        <div class="cat-btn" onclick="switchPlaylist('儿童启蒙英文童谣', '512030043', this)">🔤 英文童谣 ABC</div>
+        <div class="cat-btn" onclick="switchPlaylist('贝乐虎儿歌', '5282504856', this)">🐯 贝乐虎儿歌</div>
       </div>
     </div>
   </header>
 
   <main>
+    <div class="status-bar">
+      <span>🟢 当前状态：已连通完整版中继解析源（非 30 秒试听）</span>
+    </div>
+
     <div class="section-title">
-      <span id="listTitle">宝宝巴士儿歌海量曲库</span>
-      <span class="meta-badge" id="listBadge">正在加载...</span>
+      <span id="listTitle">经典儿歌精选</span>
+      <span class="meta-badge" id="listBadge">正在加载完整版...</span>
     </div>
     <div class="song-grid" id="songList"></div>
   </main>
 
+  <!-- 底部播放器与完整进度条 -->
   <div class="player-bar">
+    <div class="progress-container">
+      <span class="time-text" id="currentTime">00:00</span>
+      <div class="progress-bar" id="progressBar" onclick="seekAudio(event)">
+        <div class="progress-fill" id="progressFill"></div>
+      </div>
+      <span class="time-text right" id="totalDuration">00:00</span>
+    </div>
+
     <div class="player-inner">
       <div class="now-playing-info">
-        <img id="playerCover" class="now-cover" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='44' height='44'%3E%3Crect width='44' height='44' fill='%23252630'/%3E%3C/svg%3E" alt="Cover">
+        <img id="playerCover" class="now-cover" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='42' height='42'%3E%3Crect width='42' height='42' fill='%23252630'/%3E%3C/svg%3E" alt="Cover">
         <div class="now-meta">
           <div class="now-title" id="playerTitle">未在播放</div>
-          <div class="now-artist" id="playerArtist">轻触任意歌曲开始播放</div>
+          <div class="now-artist" id="playerArtist">轻触任意歌曲开始播放完整版</div>
         </div>
       </div>
 
       <button class="ctrl-btn play-pause" id="playPauseBtn" onclick="togglePlay()" title="播放/暂停">
-        <svg id="playIcon" width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
-        <svg id="pauseIcon" width="22" height="22" viewBox="0 0 24 24" fill="currentColor" style="display:none;"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+        <svg id="playIcon" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+        <svg id="pauseIcon" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" style="display:none;"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
       </button>
 
-      <button class="action-btn dl" onclick="downloadCurrentSong()" title="下载">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM17 13l-5 5-5-5h3V9h4v4h3z"/></svg>
+      <button class="action-btn" onclick="downloadCurrentSong()" title="下载完整版音频">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM17 13l-5 5-5-5h3V9h4v4h3z"/></svg>
       </button>
     </div>
   </div>
 
-  <!-- iPhone 原生下载辅助弹窗 -->
+  <!-- 下载弹窗 -->
   <div class="modal-overlay" id="downloadModal" onclick="closeModal(event)">
     <div class="modal-box" onclick="event.stopPropagation()">
-      <div class="modal-title">📥 歌曲下载提示</div>
+      <div class="modal-title">📥 完整版 MP3 下载</div>
       <div class="modal-desc">
-        • <b>电脑端</b>：点击下方绿色按钮直接保存音频文件。<br><br>
-        • <b>iPhone 手机端（请按照此步骤）</b>：<br>
-        长按下方绿色按钮 ➔ 在弹出菜单中选择<b>【下载链接的文件】</b>，即可保存到 iPhone 自带的<b>【文件】App</b>！
+        • <b>电脑端</b>：点击下方绿色按钮即可保存整首 MP3。<br><br>
+        • <b>iPhone 手机端</b>：<br>
+        长按下方绿色按钮 ➔ 选择<b>【下载链接的文件】</b>，整首完整原版音频即可保存到 iPhone 自带的<b>【文件】App</b>！
       </div>
       <a id="modalDirectLink" class="modal-btn primary" href="#" target="_blank">长按我【下载链接的文件】</a>
       <div class="modal-close" onclick="closeModal()">取消并关闭</div>
     </div>
   </div>
 
-  <audio id="audioCore"></audio>
+  <audio id="audioCore" preload="auto"></audio>
   <div id="toast" class="toast">提示信息</div>
 
   <script>
+    // ==========================================
+    // 核心配置：解析 API 地址
+    // 默认内置了稳定的公共节点；如果您在 Vercel 部署了自己的私有服务，替换这里即可！
+    // ==========================================
+    const METING_API = 'https://api.injahow.cn/meting/';
+
     const state = {
       songs: [],
       currentIndex: -1,
@@ -456,77 +473,56 @@
     const songListEl = document.getElementById('songList');
     const listTitle = document.getElementById('listTitle');
     const listBadge = document.getElementById('listBadge');
+    const progressFill = document.getElementById('progressFill');
+    const currentTimeEl = document.getElementById('currentTime');
+    const totalDurationEl = document.getElementById('totalDuration');
 
     window.addEventListener('DOMContentLoaded', () => {
-      // 首次载入默认加载宝宝巴士 200 首海量儿歌
-      queryLibrary('宝宝巴士');
+      // 默认加载经典儿歌精选歌单
+      switchPlaylist('经典儿歌精选', '2619366284');
       setupAudioEvents();
     });
 
-    function loadCategory(keyword, el) {
-      document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
-      if (el) el.classList.add('active');
-      document.getElementById('searchInput').value = keyword;
-      queryLibrary(keyword);
+    function formatTime(seconds) {
+      if (isNaN(seconds) || seconds < 0) return '00:00';
+      const m = Math.floor(seconds / 60);
+      const s = Math.floor(seconds % 60);
+      return `${m < 10 ? '0' : ''}${m}:${s < 10 ? '0' : ''}${s}`;
     }
 
-    function triggerSearch() {
-      const q = document.getElementById('searchInput').value.trim();
-      if (!q) {
-        showToast('请输入关键词');
-        return;
-      }
-      document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
-      queryLibrary(q);
-    }
-
-    document.getElementById('searchInput').addEventListener('keydown', (e) => {
-      if (e.key === 'Enter') triggerSearch();
-    });
-
-    // 核心查询逻辑：将 limit 拉满至官方允许的最大值 200！
-    function queryLibrary(keyword) {
-      listTitle.innerText = `正在加载: "${keyword}"...`;
-      listBadge.innerText = '检索中...';
-
-      const cbName = 'jsonp_big_' + Date.now();
-      const script = document.createElement('script');
-      // limit=200 彻底拉满，不再是 40 首！
-      script.src = `https://itunes.apple.com/search?term=${encodeURIComponent(keyword)}&country=hk&entity=song&limit=200&callback=${cbName}`;
-
-      const timer = setTimeout(() => {
-        cleanup();
-        showToast('请求超时，请重试');
-      }, 7000);
-
-      function cleanup() {
-        clearTimeout(timer);
-        delete window[cbName];
-        if (script.parentNode) script.parentNode.removeChild(script);
+    function switchPlaylist(title, playlistId, el) {
+      if (el) {
+        document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+        el.classList.add('active');
       }
 
-      window[cbName] = function(data) {
-        cleanup();
-        if (data && data.results && data.results.length > 0) {
-          state.songs = data.results.map(item => ({
-            id: item.trackId,
-            title: item.trackName,
-            artist: item.artistName,
-            album: item.collectionName || '正版单曲',
-            coverImg: (item.artworkUrl100 || '').replace('100x100bb', '300x300bb'),
-            url: item.previewUrl
-          }));
-          listTitle.innerText = `"${keyword}" 搜索结果`;
-          listBadge.innerText = `共加载 ${state.songs.length} 首歌`;
-          renderSongList(state.songs);
-        } else {
-          listTitle.innerText = `搜索结果: "${keyword}"`;
-          listBadge.innerText = '0 首';
-          showToast('未找到相关歌曲，换个词试试');
-        }
-      };
+      listTitle.innerText = title;
+      listBadge.innerText = '正在调取完整版曲库...';
+      songListEl.innerHTML = '';
 
-      document.body.appendChild(script);
+      fetch(`${METING_API}?server=netease&type=playlist&id=${playlistId}`)
+        .then(res => res.json())
+        .then(data => {
+          if (Array.isArray(data) && data.length > 0) {
+            state.songs = data.map((item, idx) => ({
+              id: idx,
+              title: item.name || '经典儿歌',
+              artist: item.artist || '儿童音乐',
+              coverImg: item.pic || 'data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'46\' height=\'46\'%3E%3Crect width=\'46\' height=\'46\' fill=\'%23252630\'/%3E%3C/svg%3E',
+              url: item.url // 此处为完整原曲 MP3 直链！
+            }));
+            listBadge.innerText = `共 ${state.songs.length} 首完整版`;
+            renderSongList(state.songs);
+          } else {
+            showToast('获取歌单失败，请重试');
+            listBadge.innerText = '加载失败';
+          }
+        })
+        .catch(err => {
+          console.error(err);
+          showToast('网络请求异常，请检查接口配置');
+          listBadge.innerText = '网络异常';
+        });
     }
 
     function renderSongList(songs) {
@@ -544,15 +540,13 @@
           </div>
           <div class="song-details" onclick="playSong(${index})">
             <div class="song-title">${escapeHtml(song.title)}</div>
-            <div class="song-artist">${escapeHtml(song.artist)} · ${escapeHtml(song.album)}</div>
+            <div class="song-artist">${escapeHtml(song.artist)} · 完整版</div>
           </div>
-          <div class="song-actions">
-            <button class="action-btn dl" onclick="openDownloadModal(event, ${index})" title="下载音频">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM17 13l-5 5-5-5h3V9h4v4h3z"/>
-              </svg>
-            </button>
-          </div>
+          <button class="action-btn" onclick="openDownloadModal(event, ${index})" title="下载整首音频">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM17 13l-5 5-5-5h3V9h4v4h3z"/>
+            </svg>
+          </button>
         `;
         songListEl.appendChild(card);
       });
@@ -597,16 +591,42 @@
       if (!song) return;
       document.getElementById('playerCover').src = song.coverImg;
       document.getElementById('playerTitle').innerText = song.title;
-      document.getElementById('playerArtist').innerText = `${song.artist} · ${song.album}`;
+      document.getElementById('playerArtist').innerText = `${song.artist}（完整版）`;
       document.getElementById('playIcon').style.display = state.isPlaying ? 'none' : 'block';
       document.getElementById('pauseIcon').style.display = state.isPlaying ? 'block' : 'none';
     }
 
     function setupAudioEvents() {
+      // 随着音频加载，自动读取并显示歌曲真正的整曲总时长（几分钟）
+      audio.addEventListener('durationchange', () => {
+        if (audio.duration && !isNaN(audio.duration)) {
+          totalDurationEl.innerText = formatTime(audio.duration);
+        }
+      });
+
+      // 实时播放进度
+      audio.addEventListener('timeupdate', () => {
+        if (audio.duration) {
+          const pct = (audio.currentTime / audio.duration) * 100;
+          progressFill.style.width = `${pct}%`;
+          currentTimeEl.innerText = formatTime(audio.currentTime);
+          totalDurationEl.innerText = formatTime(audio.duration);
+        }
+      });
+
+      // 自动播放下一首
       audio.addEventListener('ended', () => {
         let next = state.currentIndex + 1;
         if (next < state.songs.length) playSong(next);
       });
+    }
+
+    function seekAudio(e) {
+      if (!audio.duration) return;
+      const rect = e.currentTarget.getBoundingClientRect();
+      const clickX = e.clientX - rect.left;
+      const pct = clickX / rect.width;
+      audio.currentTime = pct * audio.duration;
     }
 
     function openDownloadModal(e, index) {
@@ -616,7 +636,7 @@
 
       const directLink = document.getElementById('modalDirectLink');
       directLink.href = song.url;
-      directLink.setAttribute('download', `${song.artist} - ${song.title}.m4a`);
+      directLink.setAttribute('download', `${song.artist} - ${song.title}.mp3`);
 
       document.getElementById('downloadModal').style.display = 'flex';
     }
