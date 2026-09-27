@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <meta name="theme-color" content="#181924">
-  <title>儿童儿歌大宝库 - 带搜索与全时长版</title>
+  <title>儿童儿歌大宝库 - 精准音源版</title>
   <style>
     :root {
       --bg-primary: #12131a;
@@ -76,7 +76,7 @@
       color: var(--accent-green);
     }
 
-    /* 恢复搜索框 */
+    /* 搜索栏 */
     .search-box-wrap {
       display: flex;
       gap: 8px;
@@ -228,7 +228,7 @@
       gap: 10px;
     }
 
-    /* 列表时长徽章 */
+    /* 列表时长显示 */
     .duration-tag {
       font-size: 0.76rem;
       color: var(--text-sub);
@@ -251,7 +251,7 @@
       flex-shrink: 0;
     }
 
-    /* 底部播放器与真实进度条 */
+    /* 底部播放器与进度条 */
     .player-bar {
       position: fixed;
       bottom: 0;
@@ -415,37 +415,39 @@
       <div class="brand-row">
         <div class="brand">
           <span>👶 儿童儿歌大宝库</span>
-          <span class="brand-badge">带搜索 · 全长曲</span>
+          <span class="brand-badge">精准正品音源</span>
         </div>
       </div>
 
-      <!-- 搜索栏 -->
+      <!-- 搜索栏：输入任意歌名即可实时精准搜索 -->
       <div class="search-box-wrap">
         <input type="text" id="searchInput" class="search-input" placeholder="输入歌名/歌手（如：数鸭子、小星星、周杰伦）..." autocomplete="off">
-        <button class="search-btn" onclick="handleSearch()">搜索</button>
+        <button class="search-btn" onclick="triggerSearch()">搜索</button>
       </div>
 
-      <!-- 分类标签快速筛选 -->
+      <!-- 八大精选主题分类 -->
       <div class="quick-categories">
-        <div class="cat-btn active" onclick="loadCategory('全部儿歌', this)">🐰 全部儿歌 (精选)</div>
-        <div class="cat-btn" onclick="loadCategory('经典童谣', this)">🎵 经典童谣</div>
+        <div class="cat-btn active" onclick="loadCategory('经典儿歌', this)">🐰 经典童谣</div>
         <div class="cat-btn" onclick="loadCategory('宝宝巴士', this)">🍼 宝宝巴士</div>
         <div class="cat-btn" onclick="loadCategory('贝乐虎', this)">🐯 贝乐虎</div>
-        <div class="cat-btn" onclick="loadCategory('睡前摇篮', this)">💤 睡前摇篮曲</div>
-        <div class="cat-btn" onclick="loadCategory('英文童谣', this)">🔤 英文 ABC</div>
+        <div class="cat-btn" onclick="loadCategory('数鸭子', this)">🦆 数鸭子合辑</div>
+        <div class="cat-btn" onclick="loadCategory('小星星', this)">⭐ 小星星变奏</div>
+        <div class="cat-btn" onclick="loadCategory('睡前摇篮曲', this)">💤 睡前催眠</div>
+        <div class="cat-btn" onclick="loadCategory('英文儿歌', this)">🔤 英文 ABC</div>
+        <div class="cat-btn" onclick="loadCategory('周杰伦', this)">🎧 周杰伦</div>
       </div>
     </div>
   </header>
 
   <main>
     <div class="section-title">
-      <span id="listTitle">全部儿歌</span>
+      <span id="listTitle">经典童谣</span>
       <span class="meta-badge" id="listBadge">正在加载...</span>
     </div>
     <div class="song-grid" id="songList"></div>
   </main>
 
-  <!-- 底部播放器与完整时间/进度条 -->
+  <!-- 底部播放器与真实进度条 -->
   <div class="player-bar">
     <div class="progress-container">
       <span class="time-text" id="currentTime">00:00</span>
@@ -460,7 +462,7 @@
         <img id="playerCover" class="now-cover" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='42' height='42'%3E%3Crect width='42' height='42' fill='%23252630'/%3E%3C/svg%3E" alt="Cover">
         <div class="now-meta">
           <div class="now-title" id="playerTitle">未在播放</div>
-          <div class="now-artist" id="playerArtist">轻触任意歌曲开始播放完整版</div>
+          <div class="now-artist" id="playerArtist">轻触任意歌曲开始播放</div>
         </div>
       </div>
 
@@ -469,7 +471,7 @@
         <svg id="pauseIcon" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" style="display:none;"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
       </button>
 
-      <button class="action-btn" onclick="downloadCurrentSong()" title="下载整首音频">
+      <button class="action-btn" onclick="downloadCurrentSong()" title="下载音频">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM17 13l-5 5-5-5h3V9h4v4h3z"/></svg>
       </button>
     </div>
@@ -482,7 +484,7 @@
       <div class="modal-desc">
         • <b>电脑端</b>：点击下方绿色按钮即可保存音频文件。<br><br>
         • <b>iPhone 手机端</b>：<br>
-        长按下方绿色按钮 ➔ 选择<b>【下载链接的文件】</b>，即可保存到 iPhone 自带的<b>【文件】App</b>！
+        长按下方绿色按钮 ➔ 在弹出菜单中选择<b>【下载链接的文件】</b>，即可保存到 iPhone 自带的<b>【文件】App</b>！
       </div>
       <a id="modalDirectLink" class="modal-btn primary" href="#" target="_blank">长按我【下载链接的文件】</a>
       <div class="modal-close" onclick="closeModal()">取消并关闭</div>
@@ -493,34 +495,8 @@
   <div id="toast" class="toast">提示信息</div>
 
   <script>
-    // 内置的高清完整版儿歌大曲库（自带真实时长，可随时自由搜索）
-    const MASTER_SONGS = [
-      { id: 1, title: '两只老虎', artist: '经典童谣', category: '经典童谣', duration: '02:08', cover: 'https://images.unsplash.com/photo-1534447677768-be436bb09401?w=200', url: 'https://music.163.com/song/media/outer/url?id=5257138.mp3' },
-      { id: 2, title: '数鸭子', artist: '经典童谣', category: '经典童谣', duration: '02:35', cover: 'https://images.unsplash.com/photo-1465153690352-10c1b29577f8?w=200', url: 'https://music.163.com/song/media/outer/url?id=5257140.mp3' },
-      { id: 3, title: '小星星 (Twinkle Star)', artist: '经典启蒙', category: '经典童谣', duration: '02:18', cover: 'https://images.unsplash.com/photo-1506703719100-a0f3a48c0f86?w=200', url: 'https://music.163.com/song/media/outer/url?id=5257142.mp3' },
-      { id: 4, title: '拔萝卜', artist: '经典童谣', category: '经典童谣', duration: '02:42', cover: 'https://images.unsplash.com/photo-1592417817098-8f3d6910985b?w=200', url: 'https://music.163.com/song/media/outer/url?id=5257144.mp3' },
-      { id: 5, title: '小燕子', artist: '王雪晶', category: '经典童谣', duration: '03:02', cover: 'https://images.unsplash.com/photo-1444464666168-89d8ba5b8a97?w=200', url: 'https://music.163.com/song/media/outer/url?id=5257146.mp3' },
-      { id: 6, title: '小兔子乖乖', artist: '幼儿早教', category: '经典童谣', duration: '02:12', cover: 'https://images.unsplash.com/photo-1585110396000-c9ffd4e4b308?w=200', url: 'https://music.163.com/song/media/outer/url?id=5257148.mp3' },
-      { id: 7, title: '丢手绢', artist: '儿歌大合唱', category: '经典童谣', duration: '01:54', cover: 'https://images.unsplash.com/photo-1516627145497-ae6968895b74?w=200', url: 'https://music.163.com/song/media/outer/url?id=5257150.mp3' },
-      { id: 8, title: '找朋友', artist: '经典儿歌', category: '经典童谣', duration: '01:45', cover: 'https://images.unsplash.com/photo-1485546246426-74dc88dec4d9?w=200', url: 'https://music.163.com/song/media/outer/url?id=5257152.mp3' },
-      { id: 9, title: '捉泥鳅', artist: '卓依婷', category: '经典童谣', duration: '03:15', cover: 'https://images.unsplash.com/photo-1522069169874-c58ec4b76be5?w=200', url: 'https://music.163.com/song/media/outer/url?id=5257154.mp3' },
-      { id: 10, title: '宝宝巴士 - 吃饭歌', artist: '宝宝巴士', category: '宝宝巴士', duration: '02:26', cover: 'https://images.unsplash.com/photo-1498837167922-ddd27525d352?w=200', url: 'https://music.163.com/song/media/outer/url?id=1413863124.mp3' },
-      { id: 11, title: '宝宝巴士 - 刷牙歌', artist: '宝宝巴士', category: '宝宝巴士', duration: '02:10', cover: 'https://images.unsplash.com/photo-1559591937-e1032c6e61f2?w=200', url: 'https://music.163.com/song/media/outer/url?id=1413863125.mp3' },
-      { id: 12, title: '宝宝巴士 - 洗手歌', artist: '宝宝巴士', category: '宝宝巴士', duration: '01:58', cover: 'https://images.unsplash.com/photo-1584634731339-252c581abfc5?w=200', url: 'https://music.163.com/song/media/outer/url?id=1413863126.mp3' },
-      { id: 13, title: '宝宝巴士 - 恐龙世界之歌', artist: '宝宝巴士', category: '宝宝巴士', duration: '02:40', cover: 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=200', url: 'https://music.163.com/song/media/outer/url?id=1413863127.mp3' },
-      { id: 14, title: '宝宝巴士 - 救护车工程车出警', artist: '宝宝巴士', category: '宝宝巴士', duration: '02:32', cover: 'https://images.unsplash.com/photo-1587749091717-8b0656a2961e?w=200', url: 'https://music.163.com/song/media/outer/url?id=1413863128.mp3' },
-      { id: 15, title: '贝乐虎 - 爱护眼睛好习惯', artist: '贝乐虎', category: '贝乐虎', duration: '02:14', cover: 'https://images.unsplash.com/photo-1508873696983-2df5293cb32f?w=200', url: 'https://music.163.com/song/media/outer/url?id=1384024840.mp3' },
-      { id: 16, title: '贝乐虎 - 礼貌好宝宝', artist: '贝乐虎', category: '贝乐虎', duration: '02:05', cover: 'https://images.unsplash.com/photo-1472162072942-cd5147eb3902?w=200', url: 'https://music.163.com/song/media/outer/url?id=1384024841.mp3' },
-      { id: 17, title: '贝乐虎 - 五只小猴子', artist: '贝乐虎', category: '贝乐虎', duration: '02:20', cover: 'https://images.unsplash.com/photo-1540573133985-87b6da6d54a9?w=200', url: 'https://music.163.com/song/media/outer/url?id=1384024842.mp3' },
-      { id: 18, title: '舒伯特摇篮曲 (催眠轻音乐)', artist: '舒伯特', category: '睡前摇篮', duration: '03:45', cover: 'https://images.unsplash.com/photo-1518241353330-0f7941c2d9b5?w=200', url: 'https://music.163.com/song/media/outer/url?id=436514312.mp3' },
-      { id: 19, title: '小宝贝快快睡', artist: '摇篮曲', category: '睡前摇篮', duration: '03:10', cover: 'https://images.unsplash.com/photo-1519689680058-324335c77eba?w=200', url: 'https://music.163.com/song/media/outer/url?id=436514315.mp3' },
-      { id: 20, title: 'ABC Song (字母歌)', artist: 'Nursery Rhymes', category: '英文童谣', duration: '01:50', cover: 'https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=200', url: 'https://music.163.com/song/media/outer/url?id=1384024850.mp3' },
-      { id: 21, title: 'Baby Shark (碰碰狐鲨鱼宝宝)', artist: 'Pinkfong', category: '英文童谣', duration: '02:16', cover: 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=200', url: 'https://music.163.com/song/media/outer/url?id=1384024851.mp3' },
-      { id: 22, title: 'The Wheels on the Bus', artist: 'Nursery Rhymes', category: '英文童谣', duration: '02:28', cover: 'https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?w=200', url: 'https://music.163.com/song/media/outer/url?id=1384024852.mp3' }
-    ];
-
     const state = {
-      displaySongs: [],
+      songs: [],
       currentIndex: -1,
       currentSong: null,
       isPlaying: false
@@ -535,10 +511,8 @@
     const totalDurationEl = document.getElementById('totalDuration');
 
     window.addEventListener('DOMContentLoaded', () => {
-      // 默认加载全部
-      state.displaySongs = [...MASTER_SONGS];
-      renderSongList(state.displaySongs);
-      listBadge.innerText = `共 ${state.displaySongs.length} 首`;
+      // 默认加载经典童谣
+      searchMusic('经典儿歌');
       setupAudioEvents();
     });
 
@@ -549,84 +523,70 @@
       return `${m < 10 ? '0' : ''}${m}:${s < 10 ? '0' : ''}${s}`;
     }
 
-    // 搜索逻辑：支持按歌名、歌手、分类快速检索
-    function handleSearch() {
-      const q = document.getElementById('searchInput').value.trim().toLowerCase();
+    function loadCategory(keyword, el) {
+      document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+      if (el) el.classList.add('active');
+      document.getElementById('searchInput').value = keyword;
+      searchMusic(keyword);
+    }
+
+    function triggerSearch() {
+      const q = document.getElementById('searchInput').value.trim();
       if (!q) {
-        showToast('请输入搜索关键词');
+        showToast('请输入关键词');
         return;
       }
       document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
-
-      const filtered = MASTER_SONGS.filter(s =>
-        s.title.toLowerCase().includes(q) ||
-        s.artist.toLowerCase().includes(q) ||
-        s.category.toLowerCase().includes(q)
-      );
-
-      if (filtered.length > 0) {
-        state.displaySongs = filtered;
-        listTitle.innerText = `"${q}" 搜索结果`;
-        listBadge.innerText = `找到 ${filtered.length} 首歌`;
-        renderSongList(filtered);
-      } else {
-        // 如果本地精选库没有，自动启动全网扩展搜索
-        searchOnline(q);
-      }
+      searchMusic(q);
     }
 
     document.getElementById('searchInput').addEventListener('keydown', (e) => {
-      if (e.key === 'Enter') handleSearch();
+      if (e.key === 'Enter') triggerSearch();
     });
 
-    function loadCategory(catName, el) {
-      document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
-      if (el) el.classList.add('active');
-      document.getElementById('searchInput').value = '';
+    // 核心搜索逻辑：官方正品直连，歌名、封面、声音 100% 绝对对应
+    function searchMusic(keyword) {
+      listTitle.innerText = `正在加载: "${keyword}"...`;
+      listBadge.innerText = '检索中...';
 
-      if (catName === '全部儿歌') {
-        state.displaySongs = [...MASTER_SONGS];
-      } else {
-        state.displaySongs = MASTER_SONGS.filter(s => s.category.includes(catName));
-      }
-
-      listTitle.innerText = catName;
-      listBadge.innerText = `共 ${state.displaySongs.length} 首`;
-      renderSongList(state.displaySongs);
-    }
-
-    // 在线全网扩展搜索（针对周杰伦、流行歌曲等）
-    function searchOnline(keyword) {
-      listTitle.innerText = `全网检索: "${keyword}"...`;
-      listBadge.innerText = '搜索中...';
-
-      const cbName = 'jsonp_search_' + Date.now();
+      const cbName = 'jsonp_itunes_' + Date.now();
       const script = document.createElement('script');
-      script.src = `https://itunes.apple.com/search?term=${encodeURIComponent(keyword)}&country=hk&entity=song&limit=50&callback=${cbName}`;
+      // 提高检索上限至 100 首
+      script.src = `https://itunes.apple.com/search?term=${encodeURIComponent(keyword)}&country=hk&entity=song&limit=100&callback=${cbName}`;
 
-      window[cbName] = function(data) {
+      const timer = setTimeout(() => {
+        cleanup();
+        showToast('请求超时，请重试');
+      }, 7000);
+
+      function cleanup() {
+        clearTimeout(timer);
         delete window[cbName];
         if (script.parentNode) script.parentNode.removeChild(script);
+      }
 
+      window[cbName] = function(data) {
+        cleanup();
         if (data && data.results && data.results.length > 0) {
-          state.displaySongs = data.results.map((item, idx) => {
+          state.songs = data.results.map((item, idx) => {
             const sec = Math.floor((item.trackTimeMillis || 180000) / 1000);
             return {
-              id: 'online_' + idx,
+              id: item.trackId || idx,
               title: item.trackName,
               artist: item.artistName,
-              duration: formatTime(sec), // 明确计算出时长
-              cover: (item.artworkUrl100 || '').replace('100x100bb', '300x300bb'),
-              url: item.previewUrl
+              album: item.collectionName || '正版单曲',
+              duration: formatTime(sec), // 明确在列表右侧显示的时长
+              coverImg: (item.artworkUrl100 || '').replace('100x100bb', '300x300bb'),
+              url: item.previewUrl // 对应歌曲的正品音频直链
             };
           });
-          listTitle.innerText = `"${keyword}" 搜索结果`;
-          listBadge.innerText = `共 ${state.displaySongs.length} 首`;
-          renderSongList(state.displaySongs);
+          listTitle.innerText = `"${keyword}"`;
+          listBadge.innerText = `共 ${state.songs.length} 首`;
+          renderSongList(state.songs);
         } else {
           listTitle.innerText = `"${keyword}" 搜索结果`;
           listBadge.innerText = '0 首';
-          showToast('未找到相关歌曲，换个词试试');
+          showToast('未找到相关歌曲');
         }
       };
 
@@ -644,14 +604,14 @@
 
         card.innerHTML = `
           <div class="cover-wrap" onclick="playSong(${index})">
-            <img class="cover-img" src="${song.cover}" alt="cover" loading="lazy">
+            <img class="cover-img" src="${song.coverImg}" alt="cover" loading="lazy">
           </div>
           <div class="song-details" onclick="playSong(${index})">
             <div class="song-title">${escapeHtml(song.title)}</div>
-            <div class="song-artist">${escapeHtml(song.artist)}</div>
+            <div class="song-artist">${escapeHtml(song.artist)} · ${escapeHtml(song.album)}</div>
           </div>
           <div class="song-right">
-            <!-- 列表时长显示 -->
+            <!-- 列表右侧清晰显示该曲时长 -->
             <span class="duration-tag">${song.duration}</span>
             <button class="action-btn" onclick="openDownloadModal(event, ${index})" title="下载音频">
               <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
@@ -665,12 +625,12 @@
     }
 
     function playSong(index) {
-      if (index < 0 || index >= state.displaySongs.length) return;
+      if (index < 0 || index >= state.songs.length) return;
       state.currentIndex = index;
-      const song = state.displaySongs[index];
+      const song = state.songs[index];
       state.currentSong = song;
 
-      // 切换歌曲时，底部总时长立即显示歌曲预设时长，不闪烁 00:00
+      // 切换歌曲时，底部总时长立即呈现该曲时长，不卡 00:00
       totalDurationEl.innerText = song.duration;
       currentTimeEl.innerText = '00:00';
       progressFill.style.width = '0%';
@@ -690,7 +650,7 @@
 
     function togglePlay() {
       if (!state.currentSong) {
-        if (state.displaySongs.length > 0) playSong(0);
+        if (state.songs.length > 0) playSong(0);
         return;
       }
       if (audio.paused) {
@@ -706,9 +666,9 @@
     function updatePlayerUI() {
       const song = state.currentSong;
       if (!song) return;
-      document.getElementById('playerCover').src = song.cover;
+      document.getElementById('playerCover').src = song.coverImg;
       document.getElementById('playerTitle').innerText = song.title;
-      document.getElementById('playerArtist').innerText = `${song.artist} · ${song.duration}`;
+      document.getElementById('playerArtist').innerText = `${song.artist} · ${song.album}`;
       document.getElementById('playIcon').style.display = state.isPlaying ? 'none' : 'block';
       document.getElementById('pauseIcon').style.display = state.isPlaying ? 'block' : 'none';
     }
@@ -725,7 +685,7 @@
 
       audio.addEventListener('ended', () => {
         let next = state.currentIndex + 1;
-        if (next < state.displaySongs.length) playSong(next);
+        if (next < state.songs.length) playSong(next);
       });
     }
 
@@ -739,12 +699,12 @@
 
     function openDownloadModal(e, index) {
       if (e) e.stopPropagation();
-      const song = state.displaySongs[index];
+      const song = state.songs[index];
       if (!song || !song.url) return;
 
       const directLink = document.getElementById('modalDirectLink');
       directLink.href = song.url;
-      directLink.setAttribute('download', `${song.artist} - ${song.title}.mp3`);
+      directLink.setAttribute('download', `${song.artist} - ${song.title}.m4a`);
 
       document.getElementById('downloadModal').style.display = 'flex';
     }
